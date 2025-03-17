@@ -1,3 +1,4 @@
+import 'package:economate_mobile/widgets/button_signin.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,7 +46,7 @@ class SignInPage extends StatelessWidget {
               ),),
               const Gap(50),
 
-              Container(
+              SizedBox(
                 width: 300,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -118,7 +119,9 @@ class SignInPage extends StatelessWidget {
                 ),
               ),
 
-              Container(
+              const Gap(40),
+
+              SizedBox(
                 width: 300,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -181,6 +184,8 @@ class SignInPage extends StatelessWidget {
                             ),
                             child: Image.asset(
                               'assets/images/password.png',
+                              // height: 20,
+                              // width: 20,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -189,8 +194,13 @@ class SignInPage extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              ),
               
+              const Gap(40),
+
+              ButtonSignin()
+
+
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
               //   children: [
