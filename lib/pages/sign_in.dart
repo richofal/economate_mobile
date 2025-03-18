@@ -1,3 +1,4 @@
+import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/button_signin.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_svg/svg.dart';
@@ -73,14 +74,14 @@ class SignInPage extends StatelessWidget {
                             ],
                           ),
                           child: TextField(
-                            style: TextStyle(
+                            style: GoogleFonts.plusJakartaSans(
                               color: Color(0xFF767676),
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
                             decoration: InputDecoration(
                               hintText: 'Username',
-                              hintStyle: TextStyle(
+                              hintStyle: GoogleFonts.plusJakartaSans(
                                 color: Color(0xFF767676),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
@@ -148,14 +149,14 @@ class SignInPage extends StatelessWidget {
                             ],
                           ),
                           child: TextField(
-                            style: TextStyle(
+                            style: GoogleFonts.plusJakartaSans(
                               color: Color(0xFF767676),
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
                             decoration: InputDecoration(
                               hintText: 'Username',
-                              hintStyle: TextStyle(
+                              hintStyle: GoogleFonts.plusJakartaSans(
                                 color: Color(0xFF767676),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
@@ -201,123 +202,133 @@ class SignInPage extends StatelessWidget {
 
               ButtonSignin(),
 
-              const Gap(30),
+              const Gap(10),
 
               Text('Lupa password?',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF767676)
-              ),),
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF767676)
+                ),
+              ),
 
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Container(
-              //       height: 50,
-              //       width: 50,
-              //       decoration: BoxDecoration(
-              //         color: Color(0xFFFBFBFB),
-              //         borderRadius: BorderRadius.circular(30.0),                      
-              //         boxShadow: [
-              //           BoxShadow(
-              //             color: Color(0xB1C5BAFF),
-              //             spreadRadius: 1,
-              //             blurRadius: 8,
-              //           )                        
-              //         ]
-              //       ),
-              //     ),
+              const Gap(75),
 
-              //     Expanded(
-              //       child: Container(
-              //         height: 42,
-              //         padding: const EdgeInsets.only(left: 60),
-                      
-              //         decoration: BoxDecoration(
-              //           color: Color(0xFFFBFBFB),
-              //           borderRadius: BorderRadius.circular(30.0),
-              //           boxShadow: [
-              //             BoxShadow(
-              //               color: Color(0xB1C5BAFF),
-              //               spreadRadius: 1,
-              //               blurRadius: 8,
-              //             )
-              //           ]
-              //         ),
-              //         child: TextField(
-              //           style: TextStyle(
-              //             color: Color(0xFF767676),
-              //             fontSize: 12,
-              //             fontWeight: FontWeight.w500
-              //           ),
-              //           decoration: InputDecoration(
-              //             hintText: 'Username',
-              //             hintStyle: TextStyle(
-              //               color: Color(0xFF767676),
-              //               fontSize: 12,
-              //               fontWeight: FontWeight.w500
-              //             ),
-              //             border: InputBorder.none,
-              //             contentPadding: EdgeInsets.symmetric(vertical: 17.0),
-              //           ),
-              //         ),
-              //       ),
-              //     )
-              //   ],
-              // )
+              SizedBox(
+                width: 340,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: ColorConstant.abu,
+                        thickness: 1.5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'Atau sign in dengan',
+                        style: GoogleFonts.plusJakartaSans(
+                          color: ColorConstant.abu,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: ColorConstant.abu,
+                        thickness: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-
-              // Container(
-              //   height: 50,
-              //   width: 50,
-              //   decoration: BoxDecoration(
-              //     color: Color(0xFFFBFBFB),
-              //     borderRadius: BorderRadius.circular(30.0),                      
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Color(0xB1C5BAFF),
-              //         spreadRadius: 1,
-              //         blurRadius: 8,
-              //       )                        
-              //     ]
-              //   ),
-              // ),
-
-              // Container(
-              //   height: 42,
-              //   padding: const EdgeInsets.only(left: 60),
-                
-              //   decoration: BoxDecoration(
-              //     color: Color(0xFFFBFBFB),
-              //     borderRadius: BorderRadius.circular(30.0),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Color(0xB1C5BAFF),
-              //         spreadRadius: 1,
-              //         blurRadius: 8,
-              //       )
-              //     ]
-              //   ),
-              //   child: TextField(
-              //     style: TextStyle(
-              //       color: Color(0xFF767676),
-              //       fontSize: 12,
-              //       fontWeight: FontWeight.w500
-              //     ),
-              //     decoration: InputDecoration(
-              //       hintText: 'Username',
-              //       hintStyle: TextStyle(
-              //         color: Color(0xFF767676),
-              //         fontSize: 12,
-              //         fontWeight: FontWeight.w500
-              //       ),
-              //       border: InputBorder.none,
-              //       contentPadding: EdgeInsets.symmetric(vertical: 17.0),
-              //     ),
-              //   ),
-              // ),
+              const Gap(10),
               
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Google button
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xB1C5BAFF),
+                          spreadRadius: 1,
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: Image.asset(
+                      'assets/images/google.png', // Gantilah dengan path logo Google yang sudah bulat
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  // Facebook button
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xB1C5BAFF),
+                          spreadRadius: 1,
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: Image.asset(
+                      'assets/images/facebook.png', // Gantilah dengan path logo Facebook yang sudah bulat
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+
+              const Gap(20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Belum punya akun? ',
+                    style: GoogleFonts.plusJakartaSans(
+                      color: ColorConstant.abu,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Aksi ketika "Sign up" ditekan
+                      print("Sign up clicked");
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'Sign up',
+                        style: GoogleFonts.plusJakartaSans(
+                          color: ColorConstant.birumuda,  // Warna biru untuk "Sign up"
+                          fontWeight: FontWeight.bold,  // Membuat teks lebih tebal
+                          fontSize: 16,  // Ukuran font yang sama dengan teks sebelumnya
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+
             ],
           )
         )
