@@ -26,26 +26,35 @@ class SignInPage extends StatelessWidget {
                   color: Color(0xFF089BFF)
                 ),
               ),
+
               const Gap(10),
+
               Image.asset(
                 'assets/images/logobiru.png',
                 height: 80,
                 width: 80,
               ),
+              
               const Gap(10),
+
               Text('Selamat datang kembali!',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 22,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF767676)
-              ),),
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF767676)
+                ),
+              ),
+
               const Gap(5),
+
               Text('Masukkan akun mu disini',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF767676)
-              ),),
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF767676)
+                ),
+              ),
+
               const Gap(50),
 
               SizedBox(
@@ -327,7 +336,6 @@ class SignInPage extends StatelessWidget {
                   ),
                 ],
               ),
-
 
             ],
           )
