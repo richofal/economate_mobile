@@ -2,7 +2,7 @@ import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/button_signin.dart';
 import 'package:economate_mobile/widgets/textfield_signin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gap/gap.dart';
@@ -26,7 +26,7 @@ class SignUpPage extends StatelessWidget {
 
               Text('EconoMate', 
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 21,
+                  fontSize: 24,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF089BFF)
                 ),
@@ -36,15 +36,15 @@ class SignUpPage extends StatelessWidget {
 
               Image.asset(
                 'assets/images/logobiru.png',
-                height: 80,
-                width: 80,
+                height: 90,
+                width: 90,
               ),
               
               const Gap(10),
 
-              Text('Selamat datang kembali!',
+              Text('Selamat datang!',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 22,
+                  fontSize: 27,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF767676)
                 ),
@@ -52,9 +52,9 @@ class SignUpPage extends StatelessWidget {
 
               const Gap(5),
 
-              Text('Masukkan akun mu disini',
+              Text('Daftarkan akun mu disini',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF767676)
                 ),
@@ -78,21 +78,7 @@ class SignUpPage extends StatelessWidget {
               
               const Gap(40),
 
-              ButtonSignin(),
-
-              const Gap(12),
-
-              Text('Lupa password?',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF767676)
-                ),
-              ),
-
-              const Gap(75),
-
-              
+              ButtonSignin(buttonText: 'Sign up'),
 
               Spacer(),
               
@@ -181,7 +167,7 @@ class SignUpPage extends StatelessWidget {
                     ],
                   ),
 
-                  const Gap(20),
+                  const Gap(40),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

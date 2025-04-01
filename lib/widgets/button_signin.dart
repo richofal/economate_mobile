@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ButtonSignin extends StatelessWidget {
-  const ButtonSignin({super.key});
+  final String buttonText;
+
+  const ButtonSignin({super.key, required this.buttonText});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class ButtonSignin extends StatelessWidget {
         minimumSize: Size(170, 42),
       ),
       child: Text(
-        'Sign in',
+        buttonText,
         style: GoogleFonts.plusJakartaSans(
             fontWeight: FontWeight.w600,
             fontSize: 24,

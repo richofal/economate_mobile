@@ -25,7 +25,7 @@ class SignInPage extends StatelessWidget {
 
               Text('EconoMate', 
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 21,
+                  fontSize: 24,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF089BFF)
                 ),
@@ -35,15 +35,15 @@ class SignInPage extends StatelessWidget {
 
               Image.asset(
                 'assets/images/logobiru.png',
-                height: 80,
-                width: 80,
+                height: 90,
+                width: 90,
               ),
               
               const Gap(10),
 
               Text('Selamat datang kembali!',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 22,
+                  fontSize: 27,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF767676)
                 ),
@@ -53,7 +53,7 @@ class SignInPage extends StatelessWidget {
 
               Text('Masukkan akun mu disini',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF767676)
                 ),
@@ -213,7 +213,7 @@ class SignInPage extends StatelessWidget {
               
               const Gap(40),
 
-              ButtonSignin(),
+              ButtonSignin(buttonText: 'Sign in'),
 
               const Gap(12),
 
@@ -224,10 +224,6 @@ class SignInPage extends StatelessWidget {
                   color: Color(0xFF767676)
                 ),
               ),
-
-              const Gap(75),
-
-              
 
               Spacer(),
               
@@ -316,7 +312,7 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
 
-                  const Gap(20),
+                  const Gap(40),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

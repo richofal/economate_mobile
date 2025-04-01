@@ -11,7 +11,7 @@ class TextfieldSignin extends StatelessWidget{
   Widget build(BuildContext context) {
     String iconName = isLabel.replaceAll(' ', '');
     String icons = "assets/svgs/${iconName.toLowerCase()}.svg";
-    
+
     // TODO: implement build
     return SizedBox(
               width: 300,
@@ -59,10 +59,10 @@ class TextfieldSignin extends StatelessWidget{
                       ),
                       // Container lingkaran yang ditumpuk di depan TextField
                       Positioned(
-                        top: -4,   // Menempatkan lingkaran sedikit di atas
+                        top: -5,   // Menempatkan lingkaran sedikit di atas
                         child: Container(
-                          height: 50,
-                          width: 50,
+                          height: 52,
+                          width: 52,
                           padding: EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: Color(0xFFFBFBFB),
