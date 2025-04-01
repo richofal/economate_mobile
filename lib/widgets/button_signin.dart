@@ -13,13 +13,14 @@ class ButtonSignin extends StatelessWidget {
       onPressed: () {},
       style: TextButton.styleFrom(
         backgroundColor: ColorConstant.birumuda,
-        padding: EdgeInsets.symmetric(vertical: 14, horizontal: 50)
+        padding: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+        minimumSize: Size(170, 42),
       ),
       child: Text(
         'Sign in',
         style: GoogleFonts.plusJakartaSans(
             fontWeight: FontWeight.w600,
-            fontSize: 20,
+            fontSize: 24,
             color: Color(0xFFFBFBFB)
           )
         ),
