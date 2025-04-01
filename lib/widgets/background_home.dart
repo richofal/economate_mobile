@@ -2,20 +2,29 @@ import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundHome extends StatelessWidget{
-  const BackgroundHome({super.key});
+  final Widget child;
+
+  const BackgroundHome({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: 500,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: ColorConstant.birumuda,
+      body: Stack(
+        children: [
+          Container(
+            height: 270,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: ColorConstant.birumuda,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20)
+              )
+            ),
           ),
-        ),
-      ),
+          SafeArea(child: child)
+        ],
+      )
     );
   }
 }
