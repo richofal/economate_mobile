@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gap/gap.dart';
 
 class SignInPage extends StatelessWidget {
+
   const SignInPage({super.key});
 
   @override
@@ -109,7 +110,7 @@ class SignInPage extends StatelessWidget {
                           child: Container(
                             height: 50,
                             width: 50,
-                            padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: Color(0xFFFBFBFB),
                               borderRadius: BorderRadius.circular(30.0),
@@ -121,7 +122,7 @@ class SignInPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: Image.asset(
+                            child: SvgPicture.asset(
                               'assets/svgs/username.svg',
                               fit: BoxFit.contain,
                             ),
@@ -166,6 +167,8 @@ class SignInPage extends StatelessWidget {
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
+                            obscureText: true,
+                            obscuringCharacter: "*",
                             decoration: InputDecoration(
                               hintText: 'Password',
                               hintStyle: GoogleFonts.plusJakartaSans(
@@ -184,7 +187,7 @@ class SignInPage extends StatelessWidget {
                           child: Container(
                             height: 50,
                             width: 50,
-                            padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: Color(0xFFFBFBFB),
                               borderRadius: BorderRadius.circular(30.0),
@@ -217,7 +220,7 @@ class SignInPage extends StatelessWidget {
               Text('Lupa password?',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                   color: Color(0xFF767676)
                 ),
               ),

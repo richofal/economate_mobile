@@ -9,7 +9,9 @@ class TextfieldSignin extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    String icons = "assets/svgs/${isLabel.toLowerCase()}.svg";
+    String iconName = isLabel.replaceAll(' ', '');
+    String icons = "assets/svgs/${iconName.toLowerCase()}.svg";
+    
     // TODO: implement build
     return SizedBox(
               width: 300,
@@ -44,7 +46,7 @@ class TextfieldSignin extends StatelessWidget{
                           obscureText: true,
                           obscuringCharacter: "*",
                           decoration: InputDecoration(
-                            hintText: 'Password',
+                            hintText: isLabel,
                             hintStyle: GoogleFonts.plusJakartaSans(
                               color: Color(0xFF767676),
                               fontSize: 15,

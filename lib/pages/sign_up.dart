@@ -1,5 +1,6 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/button_signin.dart';
+import 'package:economate_mobile/widgets/textfield_signin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:flutter_svg/svg.dart';
@@ -61,155 +62,19 @@ class SignUpPage extends StatelessWidget {
 
               const Gap(50),
 
-              SizedBox(
-                width: 300,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // Stack untuk menumpuk Container lingkaran di depan TextField
-                    Stack(
-                      clipBehavior: Clip.none,  // Membuat agar lingkaran bisa melampaui batas Row
-                      children: [
-                        // Container untuk TextField
-                        Container(
-                          height: 42,
-                          width: 300, // Menentukan lebar TextField
-                          padding: const EdgeInsets.only(left: 70),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFBFBFB),
-                            borderRadius: BorderRadius.circular(30.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xB1C5BAFF),
-                                spreadRadius: 1,
-                                blurRadius: 8,
-                              ),
-                            ],
-                          ),
-                          child: TextField(
-                            style: GoogleFonts.plusJakartaSans(
-                              color: Color(0xFF767676),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Username',
-                              hintStyle: GoogleFonts.plusJakartaSans(
-                                color: Color(0xFF767676),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(vertical: 11.0),
-                            ),
-                          ),
-                        ),
-                        // Container lingkaran yang ditumpuk di depan TextField
-                        Positioned(
-                          top: -4,   // Menempatkan lingkaran sedikit di atas
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFBFBFB),
-                              borderRadius: BorderRadius.circular(30.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xB1C5BAFF),
-                                  spreadRadius: 1,
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/svgs/username.svg',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              TextfieldSignin(isLabel: 'Username'),
 
               const Gap(40),
 
-              SizedBox(
-                width: 300,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // Stack untuk menumpuk Container lingkaran di depan TextField
-                    Stack(
-                      clipBehavior: Clip.none,  // Membuat agar lingkaran bisa melampaui batas Row
-                      children: [
-                        // Container untuk TextField
-                        Container(
-                          height: 42,
-                          width: 300, // Menentukan lebar TextField
-                          padding: const EdgeInsets.only(left: 70),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFBFBFB),
-                            borderRadius: BorderRadius.circular(30.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xB1C5BAFF),
-                                spreadRadius: 1,
-                                blurRadius: 8,
-                              ),
-                            ],
-                          ),
-                          child: TextField(
-                            style: GoogleFonts.plusJakartaSans(
-                              color: Color(0xFF767676),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            obscureText: true,
-                            obscuringCharacter: "*",
-                            decoration: InputDecoration(
-                              hintText: 'Password',
-                              hintStyle: GoogleFonts.plusJakartaSans(
-                                color: Color(0xFF767676),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(vertical: 11.0),
-                            ),
-                          ),
-                        ),
-                        // Container lingkaran yang ditumpuk di depan TextField
-                        Positioned(
-                          top: -4,   // Menempatkan lingkaran sedikit di atas
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFBFBFB),
-                              borderRadius: BorderRadius.circular(30.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xB1C5BAFF),
-                                  spreadRadius: 1,
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/svgs/password.svg',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              TextfieldSignin(isLabel: 'Email'),
+
+              const Gap(40),
+
+              TextfieldSignin(isLabel: 'Password'),
+
+              const Gap(40),
+
+              TextfieldSignin(isLabel: 'Confirm Password'),
               
               const Gap(40),
 
