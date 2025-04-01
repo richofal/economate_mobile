@@ -12,7 +12,6 @@ class TextfieldSignin extends StatelessWidget{
     String iconName = isLabel.replaceAll(' ', '');
     String icons = "assets/svgs/${iconName.toLowerCase()}.svg";
 
-    // TODO: implement build
     return SizedBox(
               width: 300,
               child: Row(
