@@ -42,13 +42,13 @@ class SaldokecilHome extends StatelessWidget{
                 children: [
                   Text('Rp',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 11,
+                      fontSize: 10,
                       fontWeight: FontWeight.w600,                        
                       color: ColorConstant.putih
                     ),
                   ),
                   
-                  const Gap(3),
+                  const Gap(2),
 
                   Text(formatMoney(nominal),
                     style: GoogleFonts.plusJakartaSans(
@@ -59,7 +59,8 @@ class SaldokecilHome extends StatelessWidget{
                   )
                 ],
               ),
-            ],            )
+            ],            
+          )
         ],
       ),
     );

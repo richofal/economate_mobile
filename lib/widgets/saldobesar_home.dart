@@ -10,6 +10,14 @@ class SaldobesarHome extends StatelessWidget{
 
   const SaldobesarHome({super.key, required this.type, required this.nominal});
 
+  String formatMoney(String amount) {
+    double value = double.tryParse(amount) ?? 0.0;
+
+    final numberFormat = NumberFormat('#,###', 'id_ID');
+    return numberFormat.format(value);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +44,7 @@ class SaldobesarHome extends StatelessWidget{
 
             const Gap(5),
 
-            Text('20.274.714',
+            Text(formatMoney(nominal),
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 40,
                 fontWeight: FontWeight.w700,

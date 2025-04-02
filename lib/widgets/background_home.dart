@@ -17,8 +17,8 @@ class BackgroundHome extends StatelessWidget{
             decoration: BoxDecoration(
               color: ColorConstant.birumuda,
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)
+                bottomLeft: Radius.circular(14),
+                bottomRight: Radius.circular(14)
               )
             ),
           ),
