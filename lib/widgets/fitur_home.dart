@@ -2,8 +2,7 @@ import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gap/gap.dart';
-
+import 'package:flutter_gap/flutter_gap.dart';
 class FiturHome extends StatelessWidget{
   final String type;
 

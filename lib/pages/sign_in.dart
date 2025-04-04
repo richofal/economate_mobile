@@ -3,7 +3,7 @@ import 'package:economate_mobile/widgets/button_signin.dart';
 import 'package:economate_mobile/widgets/textfield_signin.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 
 class SignInPage extends StatelessWidget {
 

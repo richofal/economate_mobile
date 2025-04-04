@@ -7,7 +7,7 @@ import 'package:economate_mobile/widgets/saldokecil_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 
 class Home extends StatelessWidget{
   const Home({super.key});
