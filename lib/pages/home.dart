@@ -125,18 +125,20 @@ class Home extends StatelessWidget{
                   padding: EdgeInsets.only(top: 6),
                   children: [
                     Listhistory(isIcon: 'makan', isTitle: 'Ramen', isDate: '11 Maret 2025', isNominal: -36000),
-                    Listhistory(isIcon: 'bola', isTitle: 'Basket Angkatan', isDate: '11 Maret 2025', isNominal: -25000),
+                    Listhistory(isIcon: 'ball', isTitle: 'Basket Angkatan', isDate: '11 Maret 2025', isNominal: -25000),
                     Listhistory(isIcon: 'paper', isTitle: 'Print laporan', isDate: '11 Maret 2025', isNominal: -6000),
                     Listhistory(isIcon: 'cash', isTitle: 'Saku bulanan', isDate: '11 Maret 2025', isNominal: 300000),
-                    Listhistory(isIcon: 'makan', isTitle: 'Ciput', isDate: '11 Maret 2025', isNominal: -10000),
+                    Listhistory(isIcon: 'makan', isTitle: 'Ciput', isDate: '11 Maret 2025', isNominal: -11000),
                     Listhistory(isIcon: 'paper', isTitle: 'Kertas folio', isDate: '11 Maret 2025', isNominal: -10000),
+                    Listhistory(isIcon: 'makan', isTitle: 'Indomie', isDate: '11 Maret 2025', isNominal: -12000),
+                    Listhistory(isIcon: 'makan', isTitle: 'Somay', isDate: '11 Maret 2025', isNominal: -16000),
+                    Listhistory(isIcon: 'makan', isTitle: 'Chicken Katsu', isDate: '11 Maret 2025', isNominal: -13000),
                   ],
                 )
               ),
             )
           ],
         ),
-
       ),
     );
   }

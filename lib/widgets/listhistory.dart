@@ -19,15 +19,17 @@ class Listhistory extends StatelessWidget{
 
   String formatMoney(double amount) {
     final numberFormat = NumberFormat('#,###', 'id_ID');
-    return numberFormat.format(amount);
+    String result = numberFormat.format(amount);
+    return amount > 0 ? '+$result' : result;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.symmetric(horizontal: 16),
+    return Padding(padding: EdgeInsets.symmetric(horizontal: 14),
       child: Column(
         children: [
           ListTile(
+            
             contentPadding: EdgeInsets.symmetric(horizontal: 0),
             horizontalTitleGap: 10,
             dense: true,
@@ -38,21 +40,21 @@ class Listhistory extends StatelessWidget{
             ),
             title: Text(isTitle,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: ColorConstant.hitam
               ),
             ),
             subtitle: Text(isDate,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: ColorConstant.abu
               ),
             ),
             trailing: Text(formatMoney(isNominal),
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: isNominal < 0 ? ColorConstant.merah : ColorConstant.birumuda
               ),
@@ -60,7 +62,7 @@ class Listhistory extends StatelessWidget{
           ),
 
           Divider(
-            thickness: 1,
+            thickness: 1.2,
             color: ColorConstant.abu,
           ),
         ],

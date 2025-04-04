@@ -19,7 +19,7 @@ class FiturHome extends StatelessWidget{
 
     return Container(
       height: 60,
-      width: 120,
+      width: 124,
       decoration: BoxDecoration(
         color: ColorConstant.putih,
         borderRadius: BorderRadius.circular(8.0),
