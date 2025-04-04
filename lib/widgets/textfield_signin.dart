@@ -1,3 +1,4 @@
+import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,11 +27,11 @@ class TextfieldSignin extends StatelessWidget{
                         width: 300, // Menentukan lebar TextField
                         padding: const EdgeInsets.only(left: 70),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFBFBFB),
+                          color: ColorConstant.putih,
                           borderRadius: BorderRadius.circular(30.0),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xB1C5BAFF),
+                              color: ColorConstant.birushadow,
                               spreadRadius: 1,
                               blurRadius: 8,
                             ),
