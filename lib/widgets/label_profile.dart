@@ -16,7 +16,7 @@ class LabelProfile extends StatelessWidget{
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('Profil',
+            Text(isLabel,
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,

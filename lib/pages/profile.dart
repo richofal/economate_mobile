@@ -1,5 +1,7 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/background_profile.dart';
+import 'package:economate_mobile/widgets/label_profile.dart';
+import 'package:economate_mobile/widgets/textview_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,8 +55,30 @@ class Profile extends StatelessWidget{
                 ),
               ),
               
-              
-              
+              LabelProfile(isLabel: 'Profil ku'),
+
+              TextviewProfile(isIcon: 'nama', isText: 'Muhammad Herjuna Taraka'),
+
+              const Gap(2),
+
+              LabelProfile(isLabel: 'Pengaturan Akun'),
+
+              TextviewProfile(isIcon: 'akun', isText: 'Akun ku'),
+              TextviewProfile(isIcon: 'dompet', isText: 'Dompet ku'),
+              TextviewProfile(isIcon: 'kunci', isText: 'Kunci Aplikasi'),
+
+              const Gap(2),
+
+              LabelProfile(isLabel: 'Pengaturan Aplikasi'),
+
+              TextviewProfile(isIcon: 'bahasa', isText: 'Bahasa'),
+              TextviewProfile(isIcon: 'tampilan', isText: 'Tampilan'),
+
+              const Gap(2),
+
+              LabelProfile(isLabel: 'Bantuan'),
+
+              TextviewProfile(isIcon: 'tentang', isText: 'Tentang kami'),
               
             ],
           ),
