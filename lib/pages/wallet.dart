@@ -49,6 +49,8 @@ class Wallet extends StatelessWidget{
                   ),
                 ),
 
+                const Gap(10),
+
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(vertical: 10),
@@ -63,24 +65,141 @@ class Wallet extends StatelessWidget{
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      ListView(
-                        children: [
-                          ListTile(
-                              title: Text('Bank Mandiri',
+                  child: Padding(padding: EdgeInsets.only(left: 14, right: 14, bottom: 16),
+                    child: Column(
+                      children: [
+                        Column(
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              dense: true,
+                              title: Text('ShopeePay',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 28,
+                                fontSize: 20,
                                   fontWeight: FontWeight.w700,
-                                  color: ColorConstant.birumuda
+                                  color: ColorConstant.hitam
                                 ),
                               ),
-                              trailing: Text('100.000'),
+                              trailing: SizedBox(
+                                width: 160,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Rp',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                        color: ColorConstant.hitam
+                                      ),
+                                    ),
+                                    Text('9.999.900.000',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                        color: ColorConstant.hitam
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ),
-                        ],
-                      ),
-                    ],
-                  ),
+
+                            Divider(
+                              thickness: 1.2,
+                              color: ColorConstant.abu,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              dense: true,
+                              title: Text('Bank Mandiri',
+                                style: GoogleFonts.plusJakartaSans(
+                                fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: ColorConstant.hitam
+                                ),
+                              ),
+                              trailing: SizedBox(
+                                width: 160,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Rp',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                        color: ColorConstant.hitam
+                                      ),
+                                    ),
+                                    Text('9.999.900.000',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                        color: ColorConstant.hitam
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ),
+
+                            Divider(
+                              thickness: 1.2,
+                              color: ColorConstant.abu,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                              dense: true,
+                              title: Text('GoPay',
+                                style: GoogleFonts.plusJakartaSans(
+                                fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: ColorConstant.hitam
+                                ),
+                              ),
+                              trailing: SizedBox(
+                                width: 160,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Rp',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                        color: ColorConstant.hitam
+                                      ),
+                                    ),
+                                    Text('9.999.900.000',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                        color: ColorConstant.hitam
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ),
+
+                            Divider(
+                              thickness: 1.2,
+                              color: ColorConstant.abu,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
                 )
               ],
             ),
