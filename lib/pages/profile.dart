@@ -15,7 +15,7 @@ class Profile extends StatelessWidget{
         height: double.infinity,
         width: double.infinity,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               const Gap(70),
@@ -41,17 +41,47 @@ class Profile extends StatelessWidget{
                 ),
                 child: ClipOval(
                   child: Container(
+                    padding: EdgeInsets.all(12),
                     height: 150,
                     width: 150,
                     color: ColorConstant.putih,
                     child: SvgPicture.asset('assets/svgs/logo.svg',
-                      height: 50,
-                      width: 50,
+                      fit: BoxFit.contain,
+                      colorFilter: ColorFilter.mode(ColorConstant.birumuda, BlendMode.srcIn),
                     ),
                   ),
                 ),
               ),
               
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text('Profil',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: ColorConstant.hitam,
+                    ),
+                  )
+                ],
+              ),
+              const Gap(5),
+              
+              Container(
+                height: 50,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: ColorConstant.putih,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                      BoxShadow(
+                        color: ColorConstant.birushadow,
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                    )
+                  ]
+                ),
+              )
             ],
           ),
         ),

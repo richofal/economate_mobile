@@ -39,7 +39,7 @@ class TextfieldSignin extends StatelessWidget{
                         ),
                         child: TextField(
                           style: GoogleFonts.plusJakartaSans(
-                            color: Color(0xFF767676),
+                            color: ColorConstant.abu,
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
@@ -48,7 +48,7 @@ class TextfieldSignin extends StatelessWidget{
                           decoration: InputDecoration(
                             hintText: isLabel,
                             hintStyle: GoogleFonts.plusJakartaSans(
-                              color: Color(0xFF767676),
+                              color: ColorConstant.abu,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
