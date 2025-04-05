@@ -2,7 +2,8 @@
 // import 'package:economate_mobile/pages/sign_up.dart';
 // import 'package:economate_mobile/pages/home.dart';
 // import 'package:economate_mobile/pages/history.dart';
-import 'package:economate_mobile/pages/wallet.dart';
+// import 'package:economate_mobile/pages/wallet.dart';
+import 'package:economate_mobile/pages/profile.dart';
 // import 'package:economate_mobile/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       debugShowCheckedModeBanner: false,
-      home: const Wallet(),
+      home: const Profile(),
     ); 
   }
 }

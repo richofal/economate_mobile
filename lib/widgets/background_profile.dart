@@ -11,15 +11,16 @@ class BackgroundProfile extends StatelessWidget{
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            height: 400,
-            width: 400,
-            decoration: BoxDecoration(
-              color: ColorConstant.birumuda,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(300),
-                bottomRight: Radius.circular(300)
-              )
+          Positioned(
+            left: -100,
+            right: -100,
+            top: -300,
+            child: ClipOval(
+              child: Container(
+                height: 600,
+                width: 1000,
+                color: ColorConstant.birumuda,
+              ),
             ),
           ),
           SafeArea(child: child)

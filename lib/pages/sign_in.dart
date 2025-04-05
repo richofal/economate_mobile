@@ -25,7 +25,7 @@ class SignInPage extends StatelessWidget {
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF089BFF)
+                    color: ColorConstant.birumuda,
                   ),
                 ),
 
@@ -43,7 +43,7 @@ class SignInPage extends StatelessWidget {
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 27,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF767676)
+                    color: ColorConstant.abu,
                   ),
                 ),
 
@@ -53,7 +53,7 @@ class SignInPage extends StatelessWidget {
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF767676)
+                    color: ColorConstant.abu,
                   ),
                 ),
 
@@ -75,7 +75,7 @@ class SignInPage extends StatelessWidget {
                   style: GoogleFonts.plusJakartaSans(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF767676)
+                    color: ColorConstant.abu,
                   ),
                 ),
 
@@ -126,11 +126,11 @@ class SignInPage extends StatelessWidget {
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: ColorConstant.putih,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xB1C5BAFF),
+                                color: ColorConstant.birushadow,
                                 spreadRadius: 1,
                                 blurRadius: 8,
                               ),
@@ -148,11 +148,11 @@ class SignInPage extends StatelessWidget {
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: ColorConstant.putih,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xB1C5BAFF),
+                                color: ColorConstant.birushadow,
                                 spreadRadius: 1,
                                 blurRadius: 8,
                               ),
