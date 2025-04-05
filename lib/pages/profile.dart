@@ -81,6 +81,18 @@ class Profile extends StatelessWidget{
                     )
                   ]
                 ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset('assets/svgs/nama.svg',
+                        height: 30,
+                        width: 30,
+                        fit: BoxFit.contain,
+                      )
+                    ],
+                  ),
+                )
               )
             ],
           ),
