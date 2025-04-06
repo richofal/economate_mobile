@@ -3,10 +3,10 @@ import 'package:economate_mobile/widgets/dropdown_insert.dart';
 import 'package:economate_mobile/widgets/textfield_insert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:dropdown_search/dropdown_search.dart';
+// import 'package:animated_custom_dropdown/custom_dropdown.dart';
 
 class Insert extends StatelessWidget{
   const Insert({super.key});
@@ -39,7 +39,22 @@ class Insert extends StatelessWidget{
                 const Gap(24),
 
                 DropdownInsert(isHint: 'Kategori'),
+
+                const Gap(24),
                 
+                TextfieldInsert(isHint: 'Nominal'),
+
+                const Gap(24),
+
+                DropdownInsert(isHint: 'Wallet'),
+                
+                const Gap(24),
+                
+                TextfieldInsert(isHint: 'Tanggal'),
+
+                const Gap(24),
+                
+                TextfieldInsert(isHint: 'Keterangan', isHeight: 200),
 
                 // DropdownExample(),
 

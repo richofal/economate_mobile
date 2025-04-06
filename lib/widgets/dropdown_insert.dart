@@ -13,7 +13,7 @@ class DropdownInsert extends StatelessWidget{
     return Container(
       height: 50,
       width: double.infinity,
-      padding: EdgeInsets.only(left: 24),
+      padding: EdgeInsets.only(left: 24, right: 20),
       decoration: BoxDecoration(
         color: ColorConstant.putih,
         borderRadius: BorderRadius.circular(12),
@@ -31,6 +31,7 @@ class DropdownInsert extends StatelessWidget{
         children: [
           Expanded(
             child: TextField(
+              maxLines: null,
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
