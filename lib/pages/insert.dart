@@ -1,5 +1,6 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/dropdown_insert.dart';
+import 'package:economate_mobile/widgets/button_insert.dart';
 import 'package:economate_mobile/widgets/textfield_insert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -55,6 +56,8 @@ class Insert extends StatelessWidget{
                 const Gap(24),
                 
                 TextfieldInsert(isHint: 'Keterangan', isHeight: 200),
+
+                ButtonInsert(),
 
                 // DropdownExample(),
 
