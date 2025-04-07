@@ -57,6 +57,8 @@ class Insert extends StatelessWidget{
                 
                 TextfieldInsert(isHint: 'Keterangan', isHeight: 200),
 
+                const Gap(24),
+
                 ButtonInsert(),
 
                 // DropdownExample(),

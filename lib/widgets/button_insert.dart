@@ -29,8 +29,8 @@ class ButtonInsert extends StatelessWidget{
           Text('Tambahkan Transaksi',
             style: GoogleFonts.plusJakartaSans(
               fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: ColorConstant.hitam
+              fontWeight: FontWeight.w700,
+              color: ColorConstant.putih
             ),
           ),
         ],

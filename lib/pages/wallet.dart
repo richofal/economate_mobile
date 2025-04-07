@@ -2,6 +2,7 @@ import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/listwallet.dart';
 import 'package:economate_mobile/widgets/saldobesar_home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
@@ -11,6 +12,16 @@ class Wallet extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        color: ColorConstant.birumuda,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SvgPicture.asset('')
+          ],
+        ),
+      ),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
