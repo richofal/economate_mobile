@@ -1,24 +1,32 @@
+import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:flutter/material.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+  
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, '/signIn');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF089BFF),
+      backgroundColor: ColorConstant.birumuda,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-          ), // Jarak dari kanan kiri
+          padding: const EdgeInsets.symmetric(horizontal: 20.0 ),
           child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Center secara vertikal
-            crossAxisAlignment:
-                CrossAxisAlignment.center, // Center secara horizontal
+            mainAxisAlignment: MainAxisAlignment.center, // Center secara vertikal
+            crossAxisAlignment: CrossAxisAlignment.center, // Center secara horizontal
             children: [
-              // Bold "teman"
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(

@@ -12,23 +12,37 @@ class Wallet extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+        backgroundColor: ColorConstant.birumuda,
+        elevation: 0,
+        shape: CircleBorder(),
+        child: SvgPicture.asset('assets/svgs/add.svg',
+          width: 30,
+        ),
+      ),
+      
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
+        notchMargin: 6,
+        shape: CircularNotchedRectangle(),
         color: ColorConstant.birumuda,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.max,
           children: [
             SvgPicture.asset('assets/svgs/house.svg',
-              width: 30,
+              height: 36,
             ),
             SvgPicture.asset('assets/svgs/clock.svg',
-              width: 36,
+              height: 36,
             ),
+            const Gap(24),
             SvgPicture.asset('assets/svgs/wallet.svg',
-              width: 36,
+              height: 36,
             ),
             SvgPicture.asset('assets/svgs/profile.svg',
-              width: 30,
+              height: 36,
             ),
 
           ],
