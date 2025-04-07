@@ -18,7 +18,19 @@ class Wallet extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.max,
           children: [
-            SvgPicture.asset('')
+            SvgPicture.asset('assets/svgs/house.svg',
+              width: 30,
+            ),
+            SvgPicture.asset('assets/svgs/clock.svg',
+              width: 36,
+            ),
+            SvgPicture.asset('assets/svgs/wallet.svg',
+              width: 36,
+            ),
+            SvgPicture.asset('assets/svgs/profile.svg',
+              width: 30,
+            ),
+
           ],
         ),
       ),
