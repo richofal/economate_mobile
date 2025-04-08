@@ -181,8 +181,7 @@ class SignInPage extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Aksi ketika "Sign up" ditekan
-                            // print("Sign up clicked");
+                            Navigator.pushNamed(context, '/signUp');
                           },
                           child: RichText(
                             text: TextSpan(

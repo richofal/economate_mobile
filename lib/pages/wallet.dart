@@ -2,7 +2,6 @@ import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/listwallet.dart';
 import 'package:economate_mobile/widgets/saldobesar_home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
@@ -12,42 +11,6 @@ class Wallet extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: ColorConstant.birumuda,
-        elevation: 0,
-        shape: CircleBorder(),
-        child: SvgPicture.asset('assets/svgs/add.svg',
-          width: 30,
-        ),
-      ),
-      
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        notchMargin: 6,
-        shape: CircularNotchedRectangle(),
-        color: ColorConstant.birumuda,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SvgPicture.asset('assets/svgs/house.svg',
-              height: 36,
-            ),
-            SvgPicture.asset('assets/svgs/clock.svg',
-              height: 36,
-            ),
-            const Gap(24),
-            SvgPicture.asset('assets/svgs/wallet.svg',
-              height: 36,
-            ),
-            SvgPicture.asset('assets/svgs/profile.svg',
-              height: 36,
-            ),
-
-          ],
-        ),
-      ),
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(

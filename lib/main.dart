@@ -1,11 +1,11 @@
-// import 'package:economate_mobile/pages/sign_in.dart';
-// import 'package:economate_mobile/pages/sign_up.dart';
-// import 'package:economate_mobile/pages/home.dart';
+import 'package:economate_mobile/screens/splash_screen.dart';
+import 'package:economate_mobile/pages/sign_in_page.dart';
+import 'package:economate_mobile/pages/sign_up_page.dart';
+import 'package:economate_mobile/pages/home_page.dart';
 // import 'package:economate_mobile/pages/history.dart';
-import 'package:economate_mobile/pages/wallet.dart';
+// import 'package:economate_mobile/pages/wallet.dart';
 // import 'package:economate_mobile/pages/profile.dart';
 // import 'package:economate_mobile/pages/insert.dart';
-// import 'package:economate_mobile/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,12 +19,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      debugShowCheckedModeBanner: false,
-      home: const Wallet(),
+      title: 'EconoMate',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/signIn': (context) => SignInPage(),
+        '/signUp': (context) => SignUpPage(),
+        '/home': (context) => HomeScreen()
+      },
+      debugShowCheckedModeBanner: false,  // Menghilangkan banner debug
+      home: SplashScreen(),
     ); 
   }
 }

@@ -172,7 +172,7 @@ class SignUpPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Belum punya akun? ',
+                          'Sudah punya akun? ',
                           style: GoogleFonts.plusJakartaSans(
                             color: ColorConstant.abu,
                             fontSize: 16,
@@ -181,12 +181,11 @@ class SignUpPage extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Aksi ketika "Sign up" ditekan
-                            // print("Sign up clicked");
+                            Navigator.pushNamed(context, '/signIn');
                           },
                           child: RichText(
                             text: TextSpan(
-                              text: 'Sign up',
+                              text: 'Sign In',
                               style: GoogleFonts.plusJakartaSans(
                                 color: ColorConstant.birumuda,  // Warna biru untuk "Sign up"
                                 fontWeight: FontWeight.bold,  // Membuat teks lebih tebal

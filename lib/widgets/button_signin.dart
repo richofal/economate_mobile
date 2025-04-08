@@ -11,7 +11,9 @@ class ButtonSignin extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, '/home');
+      },
       style: TextButton.styleFrom(
         backgroundColor: ColorConstant.birumuda,
         padding: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
