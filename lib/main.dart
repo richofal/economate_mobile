@@ -2,6 +2,7 @@ import 'package:economate_mobile/screens/splash_screen.dart';
 import 'package:economate_mobile/pages/sign_in_page.dart';
 import 'package:economate_mobile/pages/sign_up_page.dart';
 import 'package:economate_mobile/screens/home_screen.dart';
+
 // import 'package:economate_mobile/pages/history.dart';
 // import 'package:economate_mobile/pages/wallet.dart';
 // import 'package:economate_mobile/pages/profile.dart';

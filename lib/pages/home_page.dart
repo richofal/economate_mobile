@@ -1,6 +1,3 @@
-import 'package:economate_mobile/pages/history_page.dart';
-import 'package:economate_mobile/pages/profile_page.dart';
-import 'package:economate_mobile/pages/wallet_page.dart';
 import 'package:economate_mobile/widgets/background_home.dart';
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/fitur_home.dart';
