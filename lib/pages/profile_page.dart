@@ -7,9 +7,14 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Profile extends StatelessWidget{
-  const Profile({super.key});
+class ProfilePage extends StatefulWidget{
+  const ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage>{
   @override
   Widget build(BuildContext context) {
     return BackgroundProfile(

@@ -6,10 +6,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
+class HistoryPage extends StatefulWidget{
+  const HistoryPage({super.key});
 
-class History extends StatelessWidget{
-  const History({super.key});
+  @override
+  State<HistoryPage> createState() => _HistoryPageState();
+}
 
+class _HistoryPageState extends State<HistoryPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(

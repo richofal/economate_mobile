@@ -1,6 +1,6 @@
-import 'package:economate_mobile/pages/history.dart';
-import 'package:economate_mobile/pages/profile.dart';
-import 'package:economate_mobile/pages/wallet.dart';
+import 'package:economate_mobile/pages/history_page.dart';
+import 'package:economate_mobile/pages/profile_page.dart';
+import 'package:economate_mobile/pages/wallet_page.dart';
 import 'package:economate_mobile/widgets/background_home.dart';
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/fitur_home.dart';
@@ -12,40 +12,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
-class HomeScreen extends StatefulWidget{
+class HomePage extends StatefulWidget{
+  const HomePage({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  // ignore: library_private_types_in_public_api
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen>{
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (_selectedIndex) {
-      case 0:
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => History())
-        );
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Wallet())
-        );
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Profile())
-        );
-    }
-  }
-
+class _HomePageState extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,61 +152,61 @@ class _HomeScreenState extends State<HomeScreen>{
         ),
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: ColorConstant.birumuda,
-        elevation: 0,
-        shape: CircleBorder(),
-        child: SvgPicture.asset('assets/svgs/add.svg',
-          width: 30,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){},
+      //   backgroundColor: ColorConstant.birumuda,
+      //   elevation: 0,
+      //   shape: CircleBorder(),
+      //   child: SvgPicture.asset('assets/svgs/add.svg',
+      //     width: 30,
+      //   ),
+      // ),
       
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        notchMargin: 6,
-        shape: CircularNotchedRectangle(),
-        color: ColorConstant.birumuda,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            IconButton(
-              icon: SvgPicture.asset('assets/svgs/house.svg',
-                height: 36,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            IconButton(
-              icon: SvgPicture.asset('assets/svgs/clock.svg',
-                height: 36,
-              ),
-              onPressed: () {
-                _onItemTapped(1);
-              },
-            ),
-            IconButton(
-              icon: SvgPicture.asset('assets/svgs/wallet.svg',
-                height: 36,
-              ),
-              onPressed: () {
-                _onItemTapped(2);
-              },
-            ),
-            IconButton(
-              icon: SvgPicture.asset('assets/svgs/profile.svg',
-                height: 36,
-              ),
-              onPressed: () {
-                _onItemTapped(3);
-              },
-            ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // bottomNavigationBar: BottomAppBar(
+      //   notchMargin: 6,
+      //   shape: CircularNotchedRectangle(),
+      //   color: ColorConstant.birumuda,
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //     mainAxisSize: MainAxisSize.max,
+      //     children: [
+      //       IconButton(
+      //         icon: SvgPicture.asset('assets/svgs/house.svg',
+      //           height: 36,
+      //         ),
+      //         onPressed: () {
+      //           Navigator.pop(context);
+      //         },
+      //       ),
+      //       IconButton(
+      //         icon: SvgPicture.asset('assets/svgs/clock.svg',
+      //           height: 36,
+      //         ),
+      //         onPressed: () {
+      //           _onItemTapped(1);
+      //         },
+      //       ),
+      //       IconButton(
+      //         icon: SvgPicture.asset('assets/svgs/wallet.svg',
+      //           height: 36,
+      //         ),
+      //         onPressed: () {
+      //           _onItemTapped(2);
+      //         },
+      //       ),
+      //       IconButton(
+      //         icon: SvgPicture.asset('assets/svgs/profile.svg',
+      //           height: 36,
+      //         ),
+      //         onPressed: () {
+      //           _onItemTapped(3);
+      //         },
+      //       ),
 
-          ],
-        ),
-      ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }
