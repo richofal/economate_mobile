@@ -1,6 +1,7 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/pages/history_page.dart';
 import 'package:economate_mobile/pages/home_page.dart';
+import 'package:economate_mobile/pages/pemasukan.dart';
 import 'package:economate_mobile/pages/profile_page.dart';
 import 'package:economate_mobile/pages/wallet_page.dart';
 import 'package:economate_mobile/widgets/button_insert_option.dart';
@@ -28,55 +29,7 @@ class _HomePageState extends State<HomeScreen> {
       body: Column(children: [buildPageView()]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                padding: EdgeInsets.only(top: 11, left: 11, right: 11, bottom: 32),
-                width: double.infinity,
-                height: 200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ButtonInsertOption(isLabel: "Pemasukan"),
-                        const Gap(8),
-                        ButtonInsertOption(isLabel: "Pengeluaran")
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 7),
-                            decoration: BoxDecoration(
-                              color: ColorConstant.putih,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Batal',
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorConstant.hitam,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(8),
-                        ButtonSubmitOption(),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+          modalInsert(context);
         },
         backgroundColor: ColorConstant.birumuda,
         elevation: 0,
@@ -136,6 +89,200 @@ class _HomePageState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<dynamic> modalInsert(BuildContext context) {
+    bool isPemasukanSelected = false;
+    bool isPengeluaranSelected = false;
+
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: EdgeInsets.only(
+                top: 11,
+                left: 11,
+                right: 11,
+                bottom: 32,
+              ),
+              width: double.infinity,
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isPemasukanSelected = true;
+                                isPengeluaranSelected = false;
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 7),
+                              decoration: BoxDecoration(
+                                color:
+                                    isPemasukanSelected
+                                        ? ColorConstant.birumuda
+                                        : ColorConstant.putih,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ColorConstant.birushadow,
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Pemasukan',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color:
+                                        isPemasukanSelected
+                                            ? ColorConstant.putih
+                                            : ColorConstant.birumuda,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Gap(8),
+                      Expanded(
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isPemasukanSelected = false;
+                                isPengeluaranSelected = true;
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 7),
+                              decoration: BoxDecoration(
+                                color:
+                                    isPengeluaranSelected
+                                        ? ColorConstant.birumuda
+                                        : ColorConstant.putih,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ColorConstant.birushadow,
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Pengeluaran',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color:
+                                        isPengeluaranSelected
+                                            ? ColorConstant.putih
+                                            : ColorConstant.birumuda,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 7),
+                          decoration: BoxDecoration(
+                            color: ColorConstant.putih,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: ColorConstant.birushadow,
+                                spreadRadius: 1,
+                                blurRadius: 6,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Batal',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: ColorConstant.hitam,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Gap(8),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Pemasukan(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 260,
+                          padding: EdgeInsets.symmetric(vertical: 7),
+                          decoration: BoxDecoration(
+                            color:
+                                (isPemasukanSelected || isPengeluaranSelected)
+                                    ? ColorConstant.birumuda
+                                    : ColorConstant.putih,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: ColorConstant.birushadow,
+                                spreadRadius: 1,
+                                blurRadius: 6,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Buat Transaksi',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color:
+                                    (isPemasukanSelected ||
+                                            isPengeluaranSelected)
+                                        ? ColorConstant.putih
+                                        : ColorConstant.birumuda,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

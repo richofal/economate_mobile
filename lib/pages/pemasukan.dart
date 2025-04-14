@@ -9,8 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 // import 'package:dropdown_search/dropdown_search.dart';
 // import 'package:animated_custom_dropdown/custom_dropdown.dart';
 
-class Insert extends StatelessWidget{
-  const Insert({super.key});
+class Pemasukan extends StatelessWidget{
+  const Pemasukan({super.key});
 
   @override
   Widget build(BuildContext context) {
