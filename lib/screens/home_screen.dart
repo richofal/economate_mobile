@@ -2,6 +2,7 @@ import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/pages/history_page.dart';
 import 'package:economate_mobile/pages/home_page.dart';
 import 'package:economate_mobile/pages/pemasukan.dart';
+import 'package:economate_mobile/pages/pengeluaran.dart';
 import 'package:economate_mobile/pages/profile_page.dart';
 import 'package:economate_mobile/pages/wallet_page.dart';
 import 'package:economate_mobile/widgets/button_insert_option.dart';
@@ -235,12 +236,23 @@ class _HomePageState extends State<HomeScreen> {
                       const Gap(8),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pop(context);
+                          if (isPemasukanSelected) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Pemasukan(),
+                              ),
+                            );
+                          }
+                          if (isPengeluaranSelected) {
+                            Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Pemasukan(),
+                              builder: (context) => Pengeluaran(),
                             ),
                           );
+                          }
                         },
                         child: Container(
                           width: 260,

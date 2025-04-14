@@ -10,8 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 // import 'package:dropdown_search/dropdown_search.dart';
 // import 'package:animated_custom_dropdown/custom_dropdown.dart';
 
-class Pemasukan extends StatelessWidget{
-  const Pemasukan({super.key});
+class Pengeluaran extends StatelessWidget{
+  const Pengeluaran({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class Pemasukan extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Gap(32),
-                    Text('Pemasukan',
+                    Text('Pengeluaran',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 42,
                         fontWeight: FontWeight.w700,
