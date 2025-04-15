@@ -44,40 +44,7 @@ class _HistoryPageState extends State<HistoryPage>{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 28,
-                      width: 136,
-                      decoration: BoxDecoration(
-                        color: ColorConstant.putih,
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorConstant.birushadow,
-                            spreadRadius: 1,
-                            blurRadius: 8,
-                          ),
-                        ],
-                      ),
-                      child: Padding(padding: EdgeInsets.only(left: 10, right: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Pengeluaran',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: ColorConstant.birumuda,
-                              ),
-                            ),
-
-                            SvgPicture.asset('assets/svgs/arrowsolid.svg',
-                              height: 9,
-                              width: 9,
-                            )
-                          ],
-                        ),
-                      )
-                    ),
+                    FilterHistory(isLabel: 'Pengeluaran', isWidth: 130),
                   ],
                 ),
 
@@ -117,7 +84,7 @@ class _HistoryPageState extends State<HistoryPage>{
                       padding: EdgeInsets.only(top: 6),
                       children: [
                         Listhistory(isIcon: 'makan', isTitle: 'Ramen', isDate: '11 Maret 2025', isNominal: -36000),
-                        Listhistory(isIcon: 'ball', isTitle: 'Basket Angkatan', isDate: '11 Maret 2025', isNominal: -25000),
+                        Listhistory(isIcon: 'ball', isTitle: 'Basket baksya', isDate: '11 Maret 2025', isNominal: -25000),
                         Listhistory(isIcon: 'paper', isTitle: 'Print laporan', isDate: '11 Maret 2025', isNominal: -6000),
                         Listhistory(isIcon: 'cash', isTitle: 'Saku bulanan', isDate: '11 Maret 2025', isNominal: 300000),
                         Listhistory(isIcon: 'makan', isTitle: 'Ciput', isDate: '11 Maret 2025', isNominal: -11000),
@@ -126,6 +93,11 @@ class _HistoryPageState extends State<HistoryPage>{
                         Listhistory(isIcon: 'makan', isTitle: 'Somay', isDate: '10 Maret 2025', isNominal: -16000),
                         Listhistory(isIcon: 'makan', isTitle: 'Chicken Katsu', isDate: '10 Maret 2025', isNominal: -13000),
                         Listhistory(isIcon: 'paper', isTitle: 'Bulpen dan stipo', isDate: '9 Maret 2025', isNominal: -16000),
+                        Listhistory(isIcon: 'cash', isTitle: 'Saku tambahan', isDate: '3 Maret 2025', isNominal: 50000),
+                        Listhistory(isIcon: 'makan', isTitle: 'Ayam kremes', isDate: '10 Maret 2025', isNominal: -14000),
+                        Listhistory(isIcon: 'makan', isTitle: 'Le mineral', isDate: '10 Maret 2025', isNominal: -5000),
+                        Listhistory(isIcon: 'paper', isTitle: 'Materai', isDate: '9 Maret 2025', isNominal: -11000),
+                        Listhistory(isIcon: 'ball', isTitle: 'Badminton baksya', isDate: '11 Maret 2025', isNominal: -20000),
                       ],
                     )
                   ),

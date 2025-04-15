@@ -247,11 +247,11 @@ class _HomePageState extends State<HomeScreen> {
                           }
                           if (isPengeluaranSelected) {
                             Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Pengeluaran(),
-                            ),
-                          );
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Pengeluaran(),
+                              ),
+                            );
                           }
                         },
                         child: Container(
@@ -309,24 +309,6 @@ class _HomePageState extends State<HomeScreen> {
       ),
     );
   }
-
-  // Widget buildBottomNav() {
-  //   return BottomNavigationBar(
-  //     type: BottomNavigationBarType.shifting,
-  //     backgroundColor: ColorConstant.birumuda,
-  //     selectedItemColor: ColorConstant.birumuda,
-  //     currentIndex: selectedPage,
-  //     items: [
-  //       BottomNavigationBarItem(label: '',icon: SvgPicture.asset('asset/svgs/house.svg', colorFilter: ColorFilter.mode(ColorConstant.putih, BlendMode.srcIn)), backgroundColor: ColorConstant.putih),
-  //       BottomNavigationBarItem(label: '',icon: SvgPicture.asset('asset/svgs/clock.svg', colorFilter: ColorFilter.mode(ColorConstant.putih, BlendMode.srcIn)), backgroundColor: ColorConstant.putih),
-  //       BottomNavigationBarItem(label: '',icon: SvgPicture.asset('asset/svgs/wallet.svg', colorFilter: ColorFilter.mode(ColorConstant.putih, BlendMode.srcIn)), backgroundColor: ColorConstant.putih),
-  //       BottomNavigationBarItem(label: '',icon: SvgPicture.asset('asset/svgs/profile.svg', colorFilter: ColorFilter.mode(ColorConstant.putih, BlendMode.srcIn)), backgroundColor: ColorConstant.putih)
-  //     ],
-  //     onTap: (int index) {
-  //       _pageController.animateToPage(index, duration: Duration(microseconds: 300), curve: Curves.easeIn);
-  //     },
-  //   );
-  // }
 
   onPageChange(int index) {
     setState(() {

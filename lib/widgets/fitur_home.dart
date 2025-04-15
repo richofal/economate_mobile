@@ -24,7 +24,7 @@ class FiturHome extends StatelessWidget{
         borderRadius: BorderRadius.circular(8.0),
         boxShadow: [
           BoxShadow(
-            color: Color(0xB1C5BAFF),
+            color: ColorConstant.hitamshadow,
             spreadRadius: 1,
             blurRadius: 8,
           ),

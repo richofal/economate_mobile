@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage>{
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: ColorConstant.birushadow,
+                        color: ColorConstant.hitamshadow,
                         spreadRadius: 1,
                         blurRadius: 8,
                       ),
@@ -148,62 +148,6 @@ class _HomePageState extends State<HomePage>{
           ),
         ),
       ),
-
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){},
-      //   backgroundColor: ColorConstant.birumuda,
-      //   elevation: 0,
-      //   shape: CircleBorder(),
-      //   child: SvgPicture.asset('assets/svgs/add.svg',
-      //     width: 30,
-      //   ),
-      // ),
-      
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // bottomNavigationBar: BottomAppBar(
-      //   notchMargin: 6,
-      //   shape: CircularNotchedRectangle(),
-      //   color: ColorConstant.birumuda,
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //     mainAxisSize: MainAxisSize.max,
-      //     children: [
-      //       IconButton(
-      //         icon: SvgPicture.asset('assets/svgs/house.svg',
-      //           height: 36,
-      //         ),
-      //         onPressed: () {
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //       IconButton(
-      //         icon: SvgPicture.asset('assets/svgs/clock.svg',
-      //           height: 36,
-      //         ),
-      //         onPressed: () {
-      //           _onItemTapped(1);
-      //         },
-      //       ),
-      //       IconButton(
-      //         icon: SvgPicture.asset('assets/svgs/wallet.svg',
-      //           height: 36,
-      //         ),
-      //         onPressed: () {
-      //           _onItemTapped(2);
-      //         },
-      //       ),
-      //       IconButton(
-      //         icon: SvgPicture.asset('assets/svgs/profile.svg',
-      //           height: 36,
-      //         ),
-      //         onPressed: () {
-      //           _onItemTapped(3);
-      //         },
-      //       ),
-
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
