@@ -40,7 +40,7 @@ class Analysis extends StatelessWidget {
 
                     const Gap(10),
 
-                    Image.asset('assets/images/barchart.png'),
+                    Image.asset('assets/images/barchart.png'), // Mohon maaf Bu/Pak ini memang belum jadi karna keterbatasan waktu
 
                     const Gap(10),
 
@@ -50,10 +50,7 @@ class Analysis extends StatelessWidget {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: ColorConstant.putih,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                          ),
+                          borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
                               color: ColorConstant.hitamshadow,

@@ -1,4 +1,5 @@
 import 'package:economate_mobile/constants/color_constant.dart';
+import 'package:economate_mobile/pages/cart_shopping.dart';
 import 'package:economate_mobile/widgets/list_shopping.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -40,14 +41,27 @@ class Shopping extends StatelessWidget {
 
                     const Gap(16),
 
-                    ListShopping(isName: 'Belanja Bulan Maret', isNominal: 300000,),
-                    ListShopping(isName: 'Belanja Bulan April', isNominal: 320000,),
+                    ListShopping(
+                      isName: 'Belanja Bulan Maret',
+                      isNominal: 300000,
+                    ),
+                    ListShopping(
+                      isName: 'Belanja Bulan April',
+                      isNominal: 320000,
+                    ),
+                    ListShopping(
+                      isName: 'Belanja Bulan Mei',
+                      isNominal: 270000,
+                    ),
 
                     const Gap(2),
 
                     GestureDetector(
                       onTap: () {
-                        
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CartShopping()),
+                        );
                       },
                       child: Container(
                         height: 50,
@@ -60,20 +74,21 @@ class Shopping extends StatelessWidget {
                               color: ColorConstant.hitamshadow,
                               spreadRadius: 1,
                               blurRadius: 7,
-                            )
-                          ]
+                            ),
+                          ],
                         ),
                         child: Center(
-                          child: Text('Tambah Aktivitas',
+                          child: Text(
+                            'Tambah Aktivitas',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: ColorConstant.putih
+                              color: ColorConstant.putih,
                             ),
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
