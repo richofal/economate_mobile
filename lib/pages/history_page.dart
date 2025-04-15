@@ -2,7 +2,6 @@ import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/filter_history.dart';
 import 'package:economate_mobile/widgets/listhistory.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 

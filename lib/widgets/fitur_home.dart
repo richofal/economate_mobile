@@ -3,53 +3,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-class FiturHome extends StatelessWidget{
+
+class FiturHome extends StatelessWidget {
   final String type;
+  final Widget fitur;
 
-  const FiturHome({super.key, required this.type});
+  const FiturHome({super.key, required this.type, required this.fitur});
 
-  String iconSource(String name){
+  String iconSource(String name) {
     String icon = name.replaceAll(' ', '');
     return "assets/svgs/${icon.toLowerCase()}.svg";
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Container(
-      height: 60,
-      width: 124,
-      decoration: BoxDecoration(
-        color: ColorConstant.putih,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: ColorConstant.hitamshadow,
-            spreadRadius: 1,
-            blurRadius: 8,
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Gap(4),
-
-          SvgPicture.asset(iconSource(type),
-            height: 30,
-            width: 30,            
-          ),
-
-          const Gap(1),
-
-          Text(type,
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: ColorConstant.birumuda,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => fitur),
+        );
+      },
+      child: Container(
+        height: 60,
+        width: 124,
+        decoration: BoxDecoration(
+          color: ColorConstant.putih,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: ColorConstant.hitamshadow,
+              spreadRadius: 1,
+              blurRadius: 8,
             ),
-          )
-        ],
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Gap(4),
+
+            SvgPicture.asset(iconSource(type), height: 30, width: 30),
+
+            const Gap(1),
+
+            Text(
+              type,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: ColorConstant.birumuda,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

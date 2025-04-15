@@ -28,7 +28,7 @@ class Pengeluaran extends StatelessWidget{
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Gap(32),
+                    const Gap(36),
                     Text('Pengeluaran',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 42,

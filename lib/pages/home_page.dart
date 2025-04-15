@@ -1,3 +1,6 @@
+import 'package:economate_mobile/pages/analysis.dart';
+import 'package:economate_mobile/pages/shopping.dart';
+import 'package:economate_mobile/pages/splitbill.dart';
 import 'package:economate_mobile/widgets/background_home.dart';
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/fitur_home.dart';
@@ -102,11 +105,11 @@ class _HomePageState extends State<HomePage>{
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FiturHome(type: 'Analisa'),
+                  FiturHome(type: 'Analisa', fitur: Analysis(),),
 
-                  FiturHome(type: 'Split Bill'),
+                  FiturHome(type: 'Split Bill', fitur: Splitbill()),
 
-                  FiturHome(type: 'Shopping'),
+                  FiturHome(type: 'Shopping', fitur: Shopping(),),
                 ],
               ),
 
