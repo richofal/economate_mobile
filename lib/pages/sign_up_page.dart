@@ -61,19 +61,19 @@ class SignUpPage extends StatelessWidget {
 
                 const Gap(26),
 
-                TextfieldSignin(isLabel: 'Username'),
+                TextfieldSignin(isLabel: 'Username', isObscure: false),
 
                 const Gap(40),
 
-                TextfieldSignin(isLabel: 'Email'),
+                TextfieldSignin(isLabel: 'Email', isObscure: false),
 
                 const Gap(40),
 
-                TextfieldSignin(isLabel: 'Password'),
+                TextfieldSignin(isLabel: 'Password', isObscure: true),
 
                 const Gap(40),
 
-                TextfieldSignin(isLabel: 'Confirm Password'),
+                TextfieldSignin(isLabel: 'Confirm Password', isObscure: true),
                 
                 const Gap(30),
 

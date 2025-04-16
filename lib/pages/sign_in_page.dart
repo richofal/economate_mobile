@@ -59,11 +59,11 @@ class SignInPage extends StatelessWidget {
 
                 const Gap(50),
 
-                TextfieldSignin(isLabel: 'Username'),
+                TextfieldSignin(isLabel: 'Username', isObscure: false,),
 
                 const Gap(40),
 
-                TextfieldSignin(isLabel: 'Password'),
+                TextfieldSignin(isLabel: 'Password', isObscure: true,),
                 
                 const Gap(40),
 

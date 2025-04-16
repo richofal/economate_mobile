@@ -5,8 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class TextfieldSignin extends StatelessWidget{
   final String isLabel;
+  final bool isObscure;
 
-  const TextfieldSignin({super.key, required this.isLabel});
+  const TextfieldSignin({super.key, required this.isLabel, required this.isObscure});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class TextfieldSignin extends StatelessWidget{
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
-                          obscureText: true,
+                          obscureText: isObscure,
                           obscuringCharacter: "*",
                           decoration: InputDecoration(
                             hintText: isLabel,
