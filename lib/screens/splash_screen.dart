@@ -1,5 +1,6 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -34,8 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: TextStyle(
-                      fontFamily: 'PlusJakartaSans', // Custom font
+                    style: GoogleFonts.plusJakartaSans( // Custom font
                       fontSize: 18,
                       color: Colors.white, // Warna font putih
                     ),
