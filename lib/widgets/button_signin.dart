@@ -1,6 +1,8 @@
 import 'package:economate_mobile/constants/color_constant.dart';
+import 'package:economate_mobile/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ButtonSignin extends StatelessWidget {
   final String buttonText;
@@ -9,9 +11,12 @@ class ButtonSignin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var loadAuth = Provider.of<AuthProvider>(context);
+
     return TextButton(
       
       onPressed: () {
+        loadAuth.submit();
         Navigator.pushReplacementNamed(context, '/home');
       },
       style: TextButton.styleFrom(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500295967599",
+    "project_id": "economate-app-cf49c",
+    "storage_bucket": "economate-app-cf49c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500295967599:android:baed7c8b92255d0ea7fe9a",
+        "android_client_info": {
+          "package_name": "com.example.economate_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNsS3NuxNTn5cLs7WMMwHztgzUvi68Mmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
