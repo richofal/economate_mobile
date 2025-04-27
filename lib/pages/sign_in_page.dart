@@ -1,5 +1,5 @@
 import 'package:economate_mobile/constants/color_constant.dart';
-import 'package:economate_mobile/provider/auth_provider.dart';
+import 'package:economate_mobile/provider/authentication_provider.dart';
 import 'package:economate_mobile/widgets/textfield_email.dart';
 import 'package:economate_mobile/widgets/textfield_password.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    var loadAuth = Provider.of<AuthProvider>(context);
+    var loadAuth = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF2F9FF),
@@ -74,7 +74,7 @@ class _SignInPageState extends State<SignInPage> {
                 const Gap(50),
 
                 Form(
-                  key: loadAuth.form,
+                  key: loadAuth.signin,
                   child: Column(
                     children: [
                       TextfieldEmail(controller: email),
@@ -88,7 +88,7 @@ class _SignInPageState extends State<SignInPage> {
                       TextButton(
                         onPressed: () {
                           loadAuth.submit();
-                          Navigator.pushReplacementNamed(context, '/home');
+                          // Navigator.pushReplacementNamed(context, '/home');
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: ColorConstant.birumuda,

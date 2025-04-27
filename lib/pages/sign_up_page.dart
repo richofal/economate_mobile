@@ -1,6 +1,5 @@
 import 'package:economate_mobile/constants/color_constant.dart';
-import 'package:economate_mobile/provider/auth_provider.dart';
-import 'package:economate_mobile/widgets/button_signin.dart';
+import 'package:economate_mobile/provider/authentication_provider.dart';
 import 'package:economate_mobile/widgets/textfield_email.dart';
 import 'package:economate_mobile/widgets/textfield_password.dart';
 import 'package:economate_mobile/widgets/textfield_signin.dart';
@@ -24,7 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    var loadAuth = Provider.of<AuthProvider>(context);
+    var loadAuth = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
       backgroundColor: Color(0xFFF2F9FF),
       body: SafeArea(
@@ -77,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const Gap(26),
 
                 Form(
-                  key: loadAuth.form,
+                  key: loadAuth.signup,
                   child: Column(
                     children: [
                       TextfieldSignin(isLabel: 'Username', isObscure: false),
@@ -99,7 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextButton(
                         onPressed: () {
                           loadAuth.submit();
-                          Navigator.pushReplacementNamed(context, '/home');
+                          // Navigator.pushReplacementNamed(context, '/home');
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: ColorConstant.birumuda,

@@ -1,5 +1,5 @@
 import 'package:economate_mobile/constants/color_constant.dart';
-import 'package:economate_mobile/provider/auth_provider.dart';
+import 'package:economate_mobile/provider/authentication_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +17,7 @@ class TextfieldEmail extends StatefulWidget {
 class _TextfieldEmailState extends State<TextfieldEmail> {
   @override
   Widget build(BuildContext context) {
-    var loadAuth = Provider.of<AuthProvider>(context);
+    var loadAuth = Provider.of<AuthenticationProvider>(context);
     return SizedBox(
       width: 300,
       child: Row(
