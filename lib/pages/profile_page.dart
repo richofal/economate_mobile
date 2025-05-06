@@ -1,4 +1,5 @@
 import 'package:economate_mobile/constants/color_constant.dart';
+import 'package:economate_mobile/pages/akun.dart';
 import 'package:economate_mobile/widgets/background_profile.dart';
 import 'package:economate_mobile/widgets/label_profile.dart';
 import 'package:economate_mobile/widgets/textview_profile.dart';
@@ -84,7 +85,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            await FirebaseAuth.instance.signOut();
+                            // await FirebaseAuth.instance.signOut();
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Akun()));
                           },
                           child: Container(
                             height: 50,

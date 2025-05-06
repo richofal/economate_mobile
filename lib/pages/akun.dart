@@ -1,5 +1,6 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/list_bulan.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/svg.dart';
@@ -69,7 +70,7 @@ class Akun extends StatelessWidget {
                             ),
                             Spacer(),
                             SvgPicture.asset(
-                              'assets/svgs/arrowstroke.svg',
+                              'assets/svgs/pensil.svg',
                               height: 24,
                               width: 24,
                               fit: BoxFit.contain,
@@ -78,6 +79,36 @@ class Akun extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const Gap(10),
+                    GestureDetector(
+                      onTap: () async {
+                        await FirebaseAuth.instance.signOut();
+                      },
+                      child: Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: ColorConstant.birumuda,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: ColorConstant.hitamshadow,
+                              spreadRadius: 1,
+                              blurRadius: 7,
+                            )
+                          ]
+                        ),
+                        child: Center(
+                          child: Text('Tambah Tagihan',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: ColorConstant.putih
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
