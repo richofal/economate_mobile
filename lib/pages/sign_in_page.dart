@@ -86,8 +86,9 @@ class _SignInPageState extends State<SignInPage> {
                       const Gap(40),
 
                       TextButton(
-                        onPressed: () {
-                          loadAuth.submit();
+                        onPressed: () async {
+                          await loadAuth.submit();
+                          Navigator.pushNamed(context, '/home');
                           // Navigator.pushReplacementNamed(context, '/home');
                         },
                         style: TextButton.styleFrom(

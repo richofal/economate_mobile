@@ -3,6 +3,7 @@ import 'package:economate_mobile/provider/authentication_provider.dart';
 import 'package:economate_mobile/widgets/textfield_email.dart';
 import 'package:economate_mobile/widgets/textfield_password.dart';
 import 'package:economate_mobile/widgets/textfield_signin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:flutter_svg/svg.dart';
@@ -80,29 +81,39 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Column(
                     children: [
                       TextfieldSignin(isLabel: 'Username', isObscure: false),
-                      
+
                       const Gap(40),
-                      
+
                       TextfieldEmail(controller: email),
-                      
+
                       const Gap(40),
-                      
+
                       TextfieldPassword(controller: password),
-                      
+
                       const Gap(40),
-                      
-                      TextfieldSignin(isLabel: 'Confirm Password', isObscure: true),
-                      
+
+                      TextfieldSignin(
+                        isLabel: 'Confirm Password',
+                        isObscure: true,
+                      ),
+
                       const Gap(30),
-                      
+
                       TextButton(
-                        onPressed: () {
-                          loadAuth.submit();
-                          // Navigator.pushReplacementNamed(context, '/home');
+                        onPressed: () async {
+                          await loadAuth.submit();
+                          // await FirebaseAuth.instance.signOut();
+                          Navigator.pushNamed(context, '/home');
+                          // setState(() {
+                          //   loadAuth.isLogin = !loadAuth.isLogin;
+                          // });
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: ColorConstant.birumuda,
-                          padding: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 1,
+                            horizontal: 1,
+                          ),
                           minimumSize: Size(170, 42),
                         ),
                         child: Text(

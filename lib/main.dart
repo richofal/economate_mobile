@@ -21,8 +21,12 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+  @override
+  _MyAppState createState() => _MyAppState(); 
+}
+class _MyAppState extends State<MyApp> {
 
   // This widget is the root of your application.
   @override
@@ -49,6 +53,15 @@ class MyApp extends StatelessWidget {
     
   }
 }
+
+// StreamBuilder(
+//   stream: FirebaseAuth.instance.authStateChanges(), 
+//   builder: (ctx, snapshot){
+//     if(snapshot.connectionState == ConnectionState.waiting){
+//       return SplashScreen();
+//     }
+//     return snapshot.hasData ? HomeScreen() : SignInPage();
+//   }),
 
 //  Widget build(BuildContext context) {
 //     return MaterialApp(

@@ -14,10 +14,10 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int selectedPage = 0;
   int selectedOption = 0;
