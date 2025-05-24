@@ -1,14 +1,20 @@
 import 'package:economate_mobile/constants/color_constant.dart';
-import 'package:economate_mobile/provider/authentication_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class TextfieldPassword extends StatefulWidget {
   final TextEditingController controller;
-  const TextfieldPassword({super.key, required this.controller});
+  final String? Function(String?)? validator;
+  final String? hintText;
+
+  const TextfieldPassword({
+    super.key,
+    required this.controller,
+    this.validator,
+    this.hintText = 'Password',
+  });
 
   @override
   State<TextfieldPassword> createState() => _TextfieldPasswordState();
@@ -16,22 +22,20 @@ class TextfieldPassword extends StatefulWidget {
 
 class _TextfieldPasswordState extends State<TextfieldPassword> {
   bool obscureText = true;
+
   @override
   Widget build(BuildContext context) {
-    var loadAuth = Provider.of<AuthenticationProvider>(context);
     return SizedBox(
       width: 300,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // Stack untuk menumpuk Container lingkaran di depan TextField
           Stack(
-            clipBehavior:
-                Clip.none, // Membuat agar lingkaran bisa melampaui batas Row
+            clipBehavior: Clip.none,
             children: [
               Container(
                 height: 42,
-                width: 300, // Menentukan lebar TextField
+                width: 300,
                 padding: const EdgeInsets.only(left: 70),
                 decoration: BoxDecoration(
                   color: ColorConstant.putih,
@@ -57,24 +61,14 @@ class _TextfieldPasswordState extends State<TextfieldPassword> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         obscureText: obscureText,
                         obscuringCharacter: "*",
-                        validator: (value) {
-                          if (value!.isEmpty || value == "") {
-                            return "Password tidak boleh kosong";
-                          } else if (value.trim().length < 8) {
-                            return "Password minimal terdiri dari 8 karakter";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          loadAuth.enteredPassword = value!;
-                        },
+                        validator: widget.validator,
                         style: GoogleFonts.plusJakartaSans(
                           color: ColorConstant.abu,
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                         decoration: InputDecoration(
-                          hintText: 'Password',
+                          hintText: widget.hintText,
                           hintStyle: GoogleFonts.plusJakartaSans(
                             color: ColorConstant.abu,
                             fontSize: 15,
@@ -101,9 +95,8 @@ class _TextfieldPasswordState extends State<TextfieldPassword> {
                   ),
                 ),
               ),
-              // Container lingkaran yang ditumpuk di depan TextField
               Positioned(
-                top: -5, // Menempatkan lingkaran sedikit di atas
+                top: -5,
                 child: Container(
                   height: 52,
                   width: 52,

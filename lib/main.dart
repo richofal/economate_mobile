@@ -1,79 +1,43 @@
-import 'package:economate_mobile/firebase_options.dart';
-import 'package:economate_mobile/provider/authentication_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:economate_mobile/screens/splash_screen.dart';
 import 'package:economate_mobile/pages/sign_in_page.dart';
 import 'package:economate_mobile/pages/sign_up_page.dart';
 import 'package:economate_mobile/screens/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:economate_mobile/provider/authentication_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+  await Supabase.initialize(
+    url: "https://utlptgfifjmxhirwkbuz.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0bHB0Z2ZpZmpteGhpcndrYnV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2MjY4MTQsImV4cCI6MjA2MzIwMjgxNH0.MxaN3BbP7jbzZMzaayQ-tTcgK2ff5_mCft98O2SMuA8",
   );
-  runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => AuthenticationProvider())],
-    child: MyApp(),
-    )
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-  @override
-  _MyAppState createState() => _MyAppState(); 
-}
-class _MyAppState extends State<MyApp> {
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider(
+      create: (context) => AuthenticationProvider(),
+      child: MaterialApp(
         title: 'EconoMate',
-        initialRoute: '/',
+        home: const SplashScreen(), // Changed from StreamBuilder to direct SplashScreen
         routes: {
-          '/': (context) => StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(), 
-            builder: (ctx, snapshot){
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return SplashScreen();
-              }
-              return snapshot.hasData ? HomeScreen() : SignInPage();
-            }),
-          '/signIn': (context) => SignInPage(),
-          '/signUp': (context) => SignUpPage(),
-          '/home': (context) => HomeScreen(),
+          '/signIn': (context) => const SignInPage(),
+          '/signUp': (context) => const SignUpPage(),
+          '/home': (context) => const HomeScreen(),
         },
-        debugShowCheckedModeBanner: false, // Menghilangkan banner debug
-        // home: SplashScreen(),
-      );
-    
+        debugShowCheckedModeBanner: false,
+      ),
+    );
   }
 }
-
-// StreamBuilder(
-//   stream: FirebaseAuth.instance.authStateChanges(), 
-//   builder: (ctx, snapshot){
-//     if(snapshot.connectionState == ConnectionState.waiting){
-//       return SplashScreen();
-//     }
-//     return snapshot.hasData ? HomeScreen() : SignInPage();
-//   }),
-
-//  Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'EconoMate',
-//       initialRoute: '/',
-//       routes: {
-//         '/': (context) => SplashScreen(),
-//         '/signIn': (context) => SignInPage(),
-//         '/signUp': (context) => SignUpPage(),
-//         '/home': (context) => HomeScreen()
-//       },
-//       debugShowCheckedModeBanner: false,  // Menghilangkan banner debug
-//       // home: SplashScreen(),
-//     ); 
-//   }

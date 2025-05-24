@@ -1,16 +1,18 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/list_bulan.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Akun extends StatelessWidget {
   const Akun({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = Supabase.instance.client.auth.currentUser;
+    
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -29,7 +31,7 @@ class Akun extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Analysis',
+                          'Akun',
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 42,
                             fontWeight: FontWeight.w700,
@@ -61,7 +63,7 @@ class Akun extends StatelessWidget {
                           children: [
                             const Gap(10),
                             Text(
-                              'Muhammad Herjuna Taraka',
+                              user?.email ?? 'Guest', // Tampilkan email pengguna
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -82,7 +84,7 @@ class Akun extends StatelessWidget {
                     const Gap(10),
                     GestureDetector(
                       onTap: () async {
-                        await FirebaseAuth.instance.signOut();
+                        await Supabase.instance.client.auth.signOut();
                       },
                       child: Container(
                         height: 50,
@@ -99,7 +101,7 @@ class Akun extends StatelessWidget {
                           ]
                         ),
                         child: Center(
-                          child: Text('Tambah Tagihan',
+                          child: Text('Log out',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,

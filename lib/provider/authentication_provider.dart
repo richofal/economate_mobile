@@ -1,109 +1,195 @@
-import 'package:economate_mobile/screens/home_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthenticationProvider extends ChangeNotifier {
-  final _fireAuth = FirebaseAuth.instance;
-  final signin = GlobalKey<FormState>();
-  final signup = GlobalKey<FormState>();
+class AuthenticationProvider with ChangeNotifier {
+  final SupabaseClient _supabase = Supabase.instance.client;
 
-  var isLogin = true;
-  var enteredEmail = '';
-  var enteredPassword = '';
+  // State management
+  bool _isLoading = false;
+  bool _isLoggedIn = false;
+  String? _errorMessage;
+  User? _currentUser;
 
-  Future<void> submit() async {
-    final isvalid =
-        isLogin
-            ? signin.currentState!.validate()
-            : signup.currentState!.validate();
+  // Form keys
+  final GlobalKey<FormState> signInFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
-    if (!isvalid) {
-      return;
-    }
+  // Getters
+  bool get isLoading => _isLoading;
+  bool get isLoggedIn => _isLoggedIn;
+  String? get errorMessage => _errorMessage;
+  User? get currentUser => _currentUser;
 
-    if (isLogin) {
-      signin.currentState!.save();
-    } else {
-      signup.currentState!.save();
-    }
+  // Constructor
+  AuthenticationProvider() {
+    _initializeAuthListener();
+  }
 
-    try {
-      if (isLogin) {
-        // Proses sign-in
-        final userCredential = await _fireAuth.signInWithEmailAndPassword(
-          email: enteredEmail.trim(),
-          password: enteredPassword.trim(),
-        );
-
-        // Periksa apakah sign-in berhasil
-        if (userCredential.user != null) {
-          print('Sign-in berhasil!');
-          notifyListeners();
-          // Tidak perlu navigasi di sini, StreamBuilder akan menangani
-        } else {
-          print('Sign-in gagal!');
-          // Tampilkan pesan error ke pengguna
-        }
+  // Initialize auth state listener
+  void _initializeAuthListener() {
+    _supabase.auth.onAuthStateChange.listen((AuthState data) {
+      final Session? session = data.session;
+      if (session != null) {
+        _isLoggedIn = true;
+        _currentUser = session.user;
       } else {
-        // Proses sign-up
-        final userCredential = await _fireAuth.createUserWithEmailAndPassword(
-          email: enteredEmail.trim(),
-          password: enteredPassword.trim(),
-        );
-
-        // Periksa apakah sign-up berhasil
-        if (userCredential.user != null) {
-          print('Sign-up berhasil!');
-          notifyListeners();
-          // Tidak perlu navigasi di sini, StreamBuilder akan menangani
-        } else {
-          print('Sign-up gagal!');
-          // Tampilkan pesan error ke pengguna
-        }
+        _isLoggedIn = false;
+        _currentUser = null;
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
-        print('Email tidak terdaftar');
-        // Tampilkan pesan error ke pengguna
-      } else if (e.code == "wrong-password") {
-        print('Password salah');
-        // Tampilkan pesan error ke pengguna
-      } else if (e.code == "email-already-in-use") {
-        print('Email sudah terdaftar');
-        // Tampilkan pesan error ke pengguna
+      notifyListeners();
+    });
+  }
+
+  // Sign up with email and password
+  // Update the signUp method to automatically sign in after successful registration
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String username,
+  }) async {
+    try {
+      _setLoading(true);
+      _clearError();
+
+      // 1. Sign up the user
+      final AuthResponse response = await _supabase.auth.signUp(
+        email: email,
+        password: password,
+      );
+
+      if (response.user == null) {
+        throw Exception('User registration failed');
+      }
+
+      // 2. Insert profile data with error handling
+      try {
+        await _supabase.from('profiles').insert({
+          'id': response.user!.id,
+          'email': email,
+          'username': username,
+          'created_at': DateTime.now().toIso8601String(),
+        });
+      } catch (e) {
+        // If profile insertion fails, delete the auth user to keep consistency
+        await _supabase.auth.admin.deleteUser(response.user!.id);
+        throw Exception('Failed to create user profile');
+      }
+
+      // Remove the automatic sign-in part
+      _currentUser = response.user;
+      _isLoggedIn = false; // Set to false to force sign in after registration
+      notifyListeners();
+    } on AuthException catch (e) {
+      _setError('Registration failed: ${e.message}');
+      rethrow;
+    } on PostgrestException catch (e) {
+      _setError('Profile creation failed: ${e.message}');
+      rethrow;
+    } catch (e) {
+      _setError('An unexpected error occurred');
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // Sign in with email and password
+  Future<void> signIn({required String email, required String password}) async {
+    try {
+      _setLoading(true);
+      _clearError();
+
+      final response = await _supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (response.session != null) {
+        _isLoggedIn = true;
+        _currentUser = response.user;
+        notifyListeners();
+      }
+    } on AuthException catch (e) {
+      _setError('Login failed: ${e.message}');
+      rethrow;
+    } catch (e) {
+      _setError('An unexpected error occurred');
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // Sign out
+  Future<void> signOut() async {
+    try {
+      _setLoading(true);
+      await _supabase.auth.signOut();
+      _isLoggedIn = false;
+      _currentUser = null;
+    } catch (e) {
+      _setError('Gagal keluar');
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // Get current session
+  Future<void> getCurrentSession() async {
+    try {
+      _setLoading(true);
+      final Session? session = _supabase.auth.currentSession;
+
+      if (session != null) {
+        _currentUser = session.user;
+        _isLoggedIn = true;
       } else {
-        print('Error: ${e.message}');
-        // Tampilkan pesan error ke pengguna
+        _isLoggedIn = false;
+        _currentUser = null;
       }
     } catch (e) {
-      print('Error: $e');
-      // Tampilkan pesan error ke pengguna
+      _setError('Gagal memeriksa sesi');
+      rethrow;
+    } finally {
+      _setLoading(false);
     }
+  }
 
-    // try {
-    //   if (isLogin) {
-    //     final UserCredential = await _fireAuth.signInWithEmailAndPassword(
-    //       email: enteredEmail,
-    //       password: enteredPassword,
-    //     );
-    //   } else {
-    //     final UserCredential = await _fireAuth.createUserWithEmailAndPassword(
-    //       email: enteredEmail,
-    //       password: enteredPassword,
-    //     );
-    //   }
-    // } catch (e) {
-    //   if (e is FirebaseAuthException) {
-    //     if (e.code == "email-already-in-use") {
-    //       // print('Email sudah terdaftar');
-    //     } else if (e.code == "user-not-found") {
-    //       // print('Email tidak terdaftar');
-    //     } else if (e.code == "wrond-password") {
-    //       // print('Password salah');
-    //     }
-    //   }
-    // }
+  Future<void> checkAuthState() async {
+    try {
+      _setLoading(true);
+      final session = _supabase.auth.currentSession;
 
-    // notifyListeners();
+      if (session != null) {
+        _isLoggedIn = true;
+        _currentUser = session.user;
+      } else {
+        _isLoggedIn = false;
+        _currentUser = null;
+      }
+      notifyListeners();
+    } catch (e) {
+      _setError('Failed to check auth state');
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // Helper methods
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  void _setError(String? message) {
+    _errorMessage = message;
+    notifyListeners();
+  }
+
+  void _clearError() {
+    _errorMessage = null;
+    notifyListeners();
   }
 }

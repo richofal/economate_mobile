@@ -3,7 +3,6 @@ import 'package:economate_mobile/pages/akun.dart';
 import 'package:economate_mobile/widgets/background_profile.dart';
 import 'package:economate_mobile/widgets/label_profile.dart';
 import 'package:economate_mobile/widgets/textview_profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';

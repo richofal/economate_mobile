@@ -4,23 +4,23 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TextfieldEmail extends StatefulWidget {
+class TextfieldUsername extends StatefulWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final String? hintText;
 
-  const TextfieldEmail({
+  const TextfieldUsername({
     super.key, 
     required this.controller,
     this.validator,
-    this.hintText = 'Email',
+    this.hintText = 'Username',
   });
 
   @override
-  State<TextfieldEmail> createState() => _TextfieldEmailState();
+  State<TextfieldUsername> createState() => _TextfieldUsernameState();
 }
 
-class _TextfieldEmailState extends State<TextfieldEmail> {
+class _TextfieldUsernameState extends State<TextfieldUsername> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -57,7 +57,21 @@ class _TextfieldEmailState extends State<TextfieldEmail> {
                       TextFormField(
                         controller: widget.controller,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: widget.validator,
+                        validator: widget.validator ?? (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Username tidak boleh kosong';
+                          }
+                          if (value.length < 3) {
+                            return 'Username minimal 3 karakter';
+                          }
+                          if (value.length > 20) {
+                            return 'Username maksimal 20 karakter';
+                          }
+                          if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+                            return 'Hanya boleh huruf, angka, dan underscore';
+                          }
+                          return null;
+                        },
                         style: GoogleFonts.plusJakartaSans(
                           color: ColorConstant.abu,
                           fontSize: 15,
@@ -107,7 +121,7 @@ class _TextfieldEmailState extends State<TextfieldEmail> {
                     ],
                   ),
                   child: SvgPicture.asset(
-                    'assets/svgs/email.svg',
+                    'assets/svgs/username.svg', // Make sure you have this asset
                     fit: BoxFit.contain,
                   ),
                 ),
