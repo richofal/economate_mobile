@@ -136,10 +136,21 @@ class _SignInPageState extends State<SignInPage> {
                                   password: _passwordController.text,
                                 );
 
+                                // Tambahkan pengecekan tambahan
                                 if (authProvider.isLoggedIn) {
                                   Navigator.pushReplacementNamed(
                                     context,
                                     '/home',
+                                  );
+                                } else {
+                                  // Tampilkan pesan khusus jika email belum dikonfirmasi
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Silakan cek email untuk verifikasi',
+                                      ),
+                                      backgroundColor: Colors.orange,
+                                    ),
                                   );
                                 }
                               } catch (e) {

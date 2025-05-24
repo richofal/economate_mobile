@@ -51,43 +51,26 @@ class AuthenticationProvider with ChangeNotifier {
       _setLoading(true);
       _clearError();
 
-      // 1. Sign up the user
       final AuthResponse response = await _supabase.auth.signUp(
         email: email,
         password: password,
+        data: {'username': username},
       );
 
       if (response.user == null) {
-        throw Exception('User registration failed');
+        throw Exception('Registrasi gagal: User tidak terdaftar');
       }
 
-      // 2. Insert profile data with error handling
-      try {
-        await _supabase.from('profiles').insert({
-          'id': response.user!.id,
-          'email': email,
-          'username': username,
-          'created_at': DateTime.now().toIso8601String(),
-        });
-      } catch (e) {
-        // If profile insertion fails, delete the auth user to keep consistency
-        await _supabase.auth.admin.deleteUser(response.user!.id);
-        throw Exception('Failed to create user profile');
-      }
+      // Login otomatis setelah registrasi
+      await _supabase.auth.signInWithPassword(email: email, password: password);
 
-      // Remove the automatic sign-in part
+      _isLoggedIn = true;
       _currentUser = response.user;
-      _isLoggedIn = false; // Set to false to force sign in after registration
       notifyListeners();
     } on AuthException catch (e) {
-      _setError('Registration failed: ${e.message}');
-      rethrow;
-    } on PostgrestException catch (e) {
-      _setError('Profile creation failed: ${e.message}');
-      rethrow;
+      _setError('Error: ${e.message} (Kode: ${e.statusCode})');
     } catch (e) {
-      _setError('An unexpected error occurred');
-      rethrow;
+      _setError('Error tidak diketahui: $e');
     } finally {
       _setLoading(false);
     }
@@ -107,14 +90,11 @@ class AuthenticationProvider with ChangeNotifier {
       if (response.session != null) {
         _isLoggedIn = true;
         _currentUser = response.user;
-        notifyListeners();
+      } else {
+        throw Exception('Login gagal: Sesi tidak valid');
       }
     } on AuthException catch (e) {
-      _setError('Login failed: ${e.message}');
-      rethrow;
-    } catch (e) {
-      _setError('An unexpected error occurred');
-      rethrow;
+      _setError(e.message); // Tampilkan error spesifik dari Supabase
     } finally {
       _setLoading(false);
     }

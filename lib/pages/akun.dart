@@ -1,5 +1,4 @@
 import 'package:economate_mobile/constants/color_constant.dart';
-import 'package:economate_mobile/widgets/list_bulan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/svg.dart';
@@ -63,7 +62,7 @@ class Akun extends StatelessWidget {
                           children: [
                             const Gap(10),
                             Text(
-                              user?.email ?? 'Guest', // Tampilkan email pengguna
+                              user?.email ?? 'Guest',
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -84,7 +83,22 @@ class Akun extends StatelessWidget {
                     const Gap(10),
                     GestureDetector(
                       onTap: () async {
-                        await Supabase.instance.client.auth.signOut();
+                        try {
+                          await Supabase.instance.client.auth.signOut();
+                          // Navigate to sign in page and clear all previous routes
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/signIn',
+                            (Route<dynamic> route) => false,
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Gagal logout: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
                       child: Container(
                         height: 50,

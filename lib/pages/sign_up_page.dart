@@ -79,7 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
 
-              const Gap(26),
+              const Gap(50),
 
               if (authProvider.errorMessage != null)
                 Padding(
@@ -100,7 +100,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     // Add the username field
                     TextfieldUsername(controller: _usernameController),
 
-                    const Gap(24),
+                    const Gap(40),
 
                     TextfieldEmail(
                       controller: _emailController,
@@ -117,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                     ),
 
-                    const Gap(24),
+                    const Gap(40),
 
                     TextfieldPassword(
                       controller: _passwordController,
@@ -132,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                     ),
 
-                    const Gap(24),
+                    const Gap(40),
 
                     // Add confirm password field
                     TextfieldPassword(
@@ -154,6 +154,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     authProvider.isLoading
                         ? const CircularProgressIndicator()
                         : TextButton(
+                          // Di dalam onPressed button Sign Up, ganti bagian ini:
                           onPressed: () async {
                             if (authProvider.signUpFormKey.currentState!
                                 .validate()) {
@@ -164,21 +165,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                   username: _usernameController.text,
                                 );
 
-                                // Show success message
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Registration successful! Please sign in.',
-                                    ),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-
-                                // Navigate to sign in page
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  '/signIn',
-                                );
+                                // Jika sign up berhasil dan langsung login, arahkan ke HomeScreen
+                                if (authProvider.isLoggedIn) {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    '/home',
+                                  );
+                                }
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -213,7 +206,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
 
-              const Gap(24),
+              // const Gap(24),
+              Spacer(),
 
               Column(
                 children: [

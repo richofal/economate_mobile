@@ -1,12 +1,15 @@
 import 'package:economate_mobile/constants/color_constant.dart';
-import 'package:economate_mobile/pages/akun.dart';
+import 'package:economate_mobile/pages/wallet_screen.dart';
 import 'package:economate_mobile/widgets/background_profile.dart';
 import 'package:economate_mobile/widgets/label_profile.dart';
+import 'package:economate_mobile/widgets/profile_list.dart';
 import 'package:economate_mobile/widgets/textview_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:economate_mobile/pages/akun.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -30,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     const Gap(70),
                     Text(
-                      'Taraka',
+                      Supabase.instance.client.auth.currentUser?.userMetadata?['username']?.toString() ?? 'Username',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 30,
                         fontWeight: FontWeight.w600,
@@ -80,61 +83,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     LabelProfile(isLabel: 'Pengaturan Akun'),
 
                     // TextviewProfile(isIcon: 'akun', isText: 'Akun ku')
-                    Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            // await FirebaseAuth.instance.signOut();
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Akun()));
-                          },
-                          child: Container(
-                            height: 50,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: ColorConstant.putih,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ColorConstant.birushadow,
-                                  spreadRadius: 1,
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 12, right: 16),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/svgs/akun.svg',
-                                    width: 26,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  const Gap(10),
-                                  Text(
-                                    'Akun ku',
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorConstant.abu,
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  SvgPicture.asset(
-                                    'assets/svgs/arrowstroke.svg',
-                                    height: 24,
-                                    width: 24,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(8),
-                      ],
-                    ),
-                    TextviewProfile(isIcon: 'dompet', isText: 'Dompet ku'),
+                    ProfileList(isIcon: 'akun', isText: 'Akun ku', isPage: Akun()),
+                    ProfileList(isIcon: 'dompet', isText: 'Dompet ku', isPage: WalletScreen()),
                     TextviewProfile(isIcon: 'kunci', isText: 'Kunci Aplikasi'),
 
                     const Gap(2),
@@ -172,5 +122,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
-// Navigator.popUntil(context, (route) => route.isFirst);
