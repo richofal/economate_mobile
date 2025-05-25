@@ -1,3 +1,5 @@
+import 'package:economate_mobile/provider/transaction_provider.dart';
+import 'package:economate_mobile/provider/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:economate_mobile/screens/splash_screen.dart';
@@ -26,11 +28,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthenticationProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
+        ChangeNotifierProvider(
+          create: (_) => TransactionProvider()..loadTransactions(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => WalletProvider()..loadWallets(),
+        ),
+      ],
       child: MaterialApp(
         title: 'EconoMate',
-        home: const SplashScreen(), // Changed from StreamBuilder to direct SplashScreen
+        home: const SplashScreen(),
         routes: {
           '/signIn': (context) => const SignInPage(),
           '/signUp': (context) => const SignUpPage(),

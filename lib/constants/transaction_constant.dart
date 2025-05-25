@@ -1,14 +1,20 @@
 class TransactionConstants {
-  static const List<String> expenseCategories = [
-    'Makanan',
-    'Alat Tulis Kantor',
-    'Olahraga',
-    'Lainnya'
-  ];
+  static const Map<String, String> categoryIcons = {
+    'makanan': 'food',
+    'transportasi': 'transport',
+    'hiburan': 'entertainment',
+    'belanja': 'shopping',
+    'gaji': 'salary',
+    'investasi': 'investment',
+    'hadiah': 'gift',
+    // Add more mappings as needed
+  };
 
   static const List<String> incomeCategories = [
-    'Saku',
-    'Gaji',
-    'Lainnya'
+    'Gaji', 'Hadiah', 'Investasi', 'Lainnya'
+  ];
+
+  static const List<String> expenseCategories = [
+    'Makanan', 'Transportasi', 'Hiburan', 'Belanja', 'Lainnya'
   ];
 }

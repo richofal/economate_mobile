@@ -25,9 +25,8 @@ class TransactionProvider with ChangeNotifier {
           .eq('user_id', userId)
           .order('date', ascending: false);
 
-      _transactions = (response as List)
-          .map((json) => Transaction.fromMap(json))
-          .toList();
+      _transactions =
+          (response as List).map((json) => Transaction.fromMap(json)).toList();
     } catch (e) {
       debugPrint('Error loading transactions: $e');
       rethrow;
@@ -39,32 +38,19 @@ class TransactionProvider with ChangeNotifier {
 
   Future<void> addTransaction(Transaction transaction) async {
     try {
-      await _supabase.from('transactions').insert(transaction.toMap());
-      await loadTransactions(); // Reload data setelah menambah
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) throw Exception('User not logged in');
+
+      await _supabase.from('transactions').insert({
+        ...transaction.toMap(),
+        'user_id': userId, // Pastikan user_id disertakan
+      });
+
+      await loadTransactions();
     } catch (e) {
       debugPrint('Error adding transaction: $e');
       rethrow;
     }
-  }
-
-  void _setupRealtimeListener() {
-    final userId = _supabase.auth.currentUser?.id;
-    if (userId == null) return;
-
-    _supabase
-        .channel('transaction_changes_$userId')
-        .onPostgresChanges(
-          event: PostgresChangeEvent.all,
-          schema: 'public',
-          table: 'transactions',
-          filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq,
-            column: 'user_id',
-            value: userId,
-          ),
-          callback: (payload) => loadTransactions(),
-        )
-        .subscribe();
   }
 
   @override

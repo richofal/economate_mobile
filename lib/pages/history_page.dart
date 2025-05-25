@@ -1,20 +1,34 @@
 import 'package:economate_mobile/constants/color_constant.dart';
+import 'package:economate_mobile/provider/transaction_provider.dart';
 import 'package:economate_mobile/widgets/filter_history.dart';
 import 'package:economate_mobile/widgets/listhistory.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class HistoryPage extends StatefulWidget{
+class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage>{
+class _HistoryPageState extends State<HistoryPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Load transactions when the page initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TransactionProvider>(context, listen: false).loadTransactions();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -50,7 +64,6 @@ class _HistoryPageState extends State<HistoryPage>{
                 const Gap(6),
 
                 Row(
-                  
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     FilterHistory(isLabel: 'Semua', isWidth: 150),
@@ -79,26 +92,29 @@ class _HistoryPageState extends State<HistoryPage>{
                         ),
                       ],
                     ),
-                    child: ListView(
-                      padding: EdgeInsets.only(top: 6),
-                      children: [
-                        Listhistory(isIcon: 'makan', isTitle: 'Ramen', isDate: '11 Maret 2025', isNominal: -36000),
-                        Listhistory(isIcon: 'ball', isTitle: 'Basket baksya', isDate: '11 Maret 2025', isNominal: -25000),
-                        Listhistory(isIcon: 'paper', isTitle: 'Print laporan', isDate: '11 Maret 2025', isNominal: -6000),
-                        Listhistory(isIcon: 'cash', isTitle: 'Saku bulanan', isDate: '11 Maret 2025', isNominal: 300000),
-                        Listhistory(isIcon: 'makan', isTitle: 'Ciput', isDate: '11 Maret 2025', isNominal: -11000),
-                        Listhistory(isIcon: 'paper', isTitle: 'Kertas folio', isDate: '11 Maret 2025', isNominal: -10000),
-                        Listhistory(isIcon: 'makan', isTitle: 'Indomie', isDate: '11 Maret 2025', isNominal: -12000),
-                        Listhistory(isIcon: 'makan', isTitle: 'Somay', isDate: '10 Maret 2025', isNominal: -16000),
-                        Listhistory(isIcon: 'makan', isTitle: 'Chicken Katsu', isDate: '10 Maret 2025', isNominal: -13000),
-                        Listhistory(isIcon: 'paper', isTitle: 'Bulpen dan stipo', isDate: '9 Maret 2025', isNominal: -16000),
-                        Listhistory(isIcon: 'cash', isTitle: 'Saku tambahan', isDate: '3 Maret 2025', isNominal: 50000),
-                        Listhistory(isIcon: 'makan', isTitle: 'Ayam kremes', isDate: '10 Maret 2025', isNominal: -14000),
-                        Listhistory(isIcon: 'makan', isTitle: 'Le mineral', isDate: '10 Maret 2025', isNominal: -5000),
-                        Listhistory(isIcon: 'paper', isTitle: 'Materai', isDate: '9 Maret 2025', isNominal: -11000),
-                        Listhistory(isIcon: 'ball', isTitle: 'Badminton baksya', isDate: '11 Maret 2025', isNominal: -20000),
-                      ],
-                    )
+                    child: transactionProvider.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : transactionProvider.transactions.isEmpty
+                          ? Center(
+                              child: Text(
+                                'Belum ada transaksi',
+                                style: GoogleFonts.plusJakartaSans(),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.only(top: 6),
+                              itemCount: transactionProvider.transactions.length,
+                              itemBuilder: (context, index) {
+                                final transaction = transactionProvider.transactions[index];
+                                return ListHistory(
+                                  category: transaction.category,
+                                  title: transaction.title,
+                                  date: transaction.date,
+                                  amount: transaction.amount,
+                                  isIncome: transaction.isIncome,
+                                );
+                              },
+                            ),
                   ),
                 )
               ],
