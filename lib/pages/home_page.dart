@@ -11,16 +11,90 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:economate_mobile/models/wallet_model.dart';
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
+  final SupabaseClient _supabase = Supabase.instance.client;
+  List<Wallet> _wallets = [];
+  double _totalBalance = 0;
+  double _totalIncome = 0; // You'll need to implement this based on your transactions
+  double _totalExpense = 0; // You'll need to implement this based on your transactions
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWallets();
+    _setupRealtimeListener();
+    // You should also load transactions here to calculate income/expense
+  }
+
+  Future<void> _loadWallets() async {
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) return;
+
+      final response = await _supabase
+          .from('wallets')
+          .select()
+          .eq('user_id', userId)
+          .order('created_at', ascending: false);
+
+      final wallets =
+          (response as List).map((json) => Wallet.fromMap(json)).toList();
+
+      setState(() {
+        _wallets = wallets;
+        _totalBalance = wallets.fold(
+          0.0,
+          (sum, wallet) => sum + wallet.balance,
+        );
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _setupRealtimeListener() {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return;
+
+    _supabase
+        .channel('wallet_changes_${userId.substring(0, 8)}')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'wallets',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'user_id',
+            value: userId,
+          ),
+          callback: (payload) {
+            if (mounted) _loadWallets();
+          },
+        )
+        .subscribe();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +113,6 @@ class _HomePageState extends State<HomePage>{
                       color: ColorConstant.putih,
                     ),
                   ),
-
                   SvgPicture.asset('assets/svgs/pfp.svg',
                     height: 35,
                     width: 35,
@@ -49,7 +122,10 @@ class _HomePageState extends State<HomePage>{
               
               const Gap(20),
 
-              SaldobesarHome(type: "Saldo", nominal: '271420110'),
+              // Display loading indicator while data is loading
+              _isLoading 
+                  ? CircularProgressIndicator(color: ColorConstant.putih)
+                  : SaldobesarHome(type: "Saldo", nominal: _totalBalance.toStringAsFixed(0)),
 
               const Gap(20),
 
@@ -73,13 +149,12 @@ class _HomePageState extends State<HomePage>{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                        
                       SvgPicture.asset('assets/svgs/panahatas.svg',
                         height: 40,
                         width: 40,
                       ),
                           
-                      SaldokecilHome(type: 'Pemasukan', nominal: '14720000'),
+                      SaldokecilHome(type: 'Pemasukan', nominal: _totalIncome.toStringAsFixed(0)),
 
                       Container(
                         height: 50,
@@ -89,7 +164,7 @@ class _HomePageState extends State<HomePage>{
                         ),
                       ),
 
-                      SaldokecilHome(type: 'Pengeluaran', nominal: '11140000'),
+                      SaldokecilHome(type: 'Pengeluaran', nominal: _totalExpense.toStringAsFixed(0)),
 
                       SvgPicture.asset('assets/svgs/panahbawah.svg',
                         height: 40,
@@ -106,9 +181,7 @@ class _HomePageState extends State<HomePage>{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   FiturHome(type: 'Analisa', fitur: Analysis(),),
-
                   FiturHome(type: 'Split Bill', fitur: Splitbill()),
-
                   FiturHome(type: 'Shopping', fitur: Shopping(),),
                 ],
               ),

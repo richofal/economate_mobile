@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/listwallet.dart';
 import 'package:economate_mobile/widgets/saldobesar_home.dart';
-import 'package:economate_mobile/models/wallet.dart';
+import 'package:economate_mobile/models/wallet_model.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});

@@ -1,20 +1,58 @@
 import 'package:economate_mobile/constants/color_constant.dart';
+import 'package:economate_mobile/models/transaction_model.dart';
+import 'package:economate_mobile/provider/transaction_provider.dart';
+import 'package:economate_mobile/provider/wallet_provider.dart';
+import 'package:economate_mobile/widgets/dropdown_category.dart';
 import 'package:economate_mobile/widgets/dropdown_insert.dart';
 import 'package:economate_mobile/widgets/button_insert.dart';
+import 'package:economate_mobile/widgets/dropdown_wallet.dart';
 import 'package:economate_mobile/widgets/textfield_insert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:dropdown_search/dropdown_search.dart';
-// import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class Pengeluaran extends StatelessWidget{
+class Pengeluaran extends StatefulWidget {
   const Pengeluaran({super.key});
 
   @override
+  State<Pengeluaran> createState() => _PengeluaranState();
+}
+
+class _PengeluaranState extends State<Pengeluaran> {
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _dateController = TextEditingController();
+  String? _selectedCategory;
+  String? _selectedWallet;
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  @override
+  void initState() {
+    super.initState();
+    _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // Load wallets saat init
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<WalletProvider>(context, listen: false).loadWallets();
+    });
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final walletProvider = Provider.of<WalletProvider>(context);
+
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -24,127 +62,176 @@ class Pengeluaran extends StatelessWidget{
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Gap(36),
-                    Text('Pengeluaran',
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 42,
-                        fontWeight: FontWeight.w700,
-                        color: ColorConstant.birumuda,
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Gap(36),
+                      Text(
+                        'Pengeluaran',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 42,
+                          fontWeight: FontWeight.w700,
+                          color: ColorConstant.birumuda,
+                        ),
                       ),
-                    ),
-              
-                    const Gap(16),
-                    
-                    TextfieldInsert(isHint: 'Judul'),
-              
-                    const Gap(24),
-              
-                    DropdownInsert(isHint: 'Kategori'),
-              
-                    const Gap(24),
-                    
-                    TextfieldInsert(isHint: 'Nominal'),
-              
-                    const Gap(24),
-              
-                    DropdownInsert(isHint: 'Wallet'),
-                    
-                    const Gap(24),
-                    
-                    TextfieldInsert(isHint: 'Tanggal'),
-              
-                    const Gap(24),
-                    
-                    TextfieldInsert(isHint: 'Keterangan', isHeight: 200),
-              
-                    const Gap(24),
-              
-                    ButtonInsert(),
-              
-                    // DropdownExample(),
-              
-                  ],
+                      const Gap(16),
+
+                      TextfieldInsert(
+                        isHint: 'Judul',
+                        controller: _titleController,
+                        validator:
+                            (value) =>
+                                value?.isEmpty ?? true
+                                    ? 'Judul harus diisi'
+                                    : null,
+                      ),
+                      const Gap(24),
+
+                      DropdownCategory(
+                        isHint: 'Kategori',
+                        isIncome: false,
+                        items: const [
+                          'Makanan',
+                          'Transportasi',
+                          'Hiburan',
+                          'Belanja',
+                          'Lainnya',
+                        ],
+                        onChanged: (value) => _selectedCategory = value,
+                        validator:
+                            (value) => value == null ? 'Pilih kategori' : null,
+                      ),
+                      const Gap(24),
+
+                      TextfieldInsert(
+                        isHint: 'Nominal',
+                        controller: _amountController,
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value?.isEmpty ?? true)
+                            return 'Nominal harus diisi';
+                          if (double.tryParse(value!) == null)
+                            return 'Masukkan angka yang valid';
+                          if (double.parse(value) <= 0)
+                            return 'Nominal harus lebih dari 0';
+                          return null;
+                        },
+                      ),
+                      const Gap(24),
+
+                      DropdownWallet(
+                        isHint: 'Wallet',
+                        items:
+                            walletProvider.wallets.map((w) => w.name).toList(),
+                        values:
+                            walletProvider.wallets.map((w) => w.id).toList(),
+                        onChanged: (value) => _selectedWallet = value,
+                        validator:
+                            (value) => value == null ? 'Pilih wallet' : null,
+                      ),
+                      const Gap(24),
+
+                      TextfieldInsert(
+                        isHint: 'Tanggal',
+                        controller: _dateController,
+                        readOnly: true,
+                        onTap: () async {
+                          final date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (date != null) {
+                            setState(() {
+                              _dateController.text = DateFormat(
+                                'yyyy-MM-dd',
+                              ).format(date);
+                            });
+                          }
+                        },
+                      ),
+                      const Gap(24),
+
+                      ButtonInsert(
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            try {
+                              final transaction = Transaction(
+                                id: '', // ID akan di-generate oleh Supabase
+                                userId: _supabase.auth.currentUser?.id ?? '',
+                                title: _titleController.text,
+                                category: _selectedCategory ?? '',
+                                amount: double.parse(_amountController.text),
+                                walletId: _selectedWallet ?? '',
+                                date: DateTime.parse(_dateController.text),
+                                isIncome: false,
+                                createdAt: DateTime.now(),
+                              );
+
+                              final transactionProvider =
+                                  Provider.of<TransactionProvider>(
+                                    context,
+                                    listen: false,
+                                  );
+
+                              await transactionProvider.addTransaction(
+                                transaction,
+                              );
+
+                              // Update wallet balance (negatif untuk pengeluaran)
+                              await _supabase.rpc(
+                                'update_wallet_balance',
+                                params: {
+                                  'wallet_id': _selectedWallet,
+                                  'amount':
+                                      -double.parse(_amountController.text),
+                                },
+                              );
+
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
+                            } catch (e) {
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Gagal menambah transaksi: $e',
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(
-              left: 10,
-              child: IconButton(
-                icon: SvgPicture.asset('assets/svgs/back.svg',
-                  height: 30,
-                  width: 30,
-                  colorFilter: ColorFilter.mode(ColorConstant.birumuda, BlendMode.srcIn)
+                left: 10,
+                child: IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/svgs/back.svg',
+                    height: 30,
+                    width: 30,
+                    colorFilter: ColorFilter.mode(
+                      ColorConstant.birumuda,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context),
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                }, 
               ),
-            ),
             ],
-          )
+          ),
         ),
       ),
     );
   }
 }
-
-// class DropdownExample extends StatefulWidget {
-//   @override
-//   _DropdownExampleState createState() => _DropdownExampleState();
-// }
-
-// class _DropdownExampleState extends State<DropdownExample> {
-//   String? selectedCategory = 'Kategori'; // Default text
-//   final List<String> categories = ['Kategori', 'Uang saku', 'Gaji', 'Bisnis'];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: <Widget>[
-//         Container(
-//           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//           decoration: BoxDecoration(
-//             color: ColorConstant.putih,
-//             borderRadius: BorderRadius.circular(12),
-//             boxShadow: [
-//               BoxShadow(
-//                 color: ColorConstant.birushadow,
-//                 spreadRadius: 1,
-//                 blurRadius: 8,
-//               ),
-//             ],
-//           ),
-//           child: DropdownButton<String>(
-//             value: selectedCategory,
-//             isExpanded: true,
-//             icon: SvgPicture.asset('assets/svgs/arrowsolid.svg'),
-//             iconSize: 30,
-//             style: GoogleFonts.plusJakartaSans(
-//               fontSize: 20,
-//               fontWeight: FontWeight.w400,
-//               color: ColorConstant.abu
-//             ),
-//             underline: SizedBox(),
-//             onChanged: (String? newValue) {
-//               setState(() {
-//                 selectedCategory = newValue;
-//               });
-//             },
-//             items: categories.map<DropdownMenuItem<String>>((String value) {
-//               return DropdownMenuItem<String>(
-//                 value: value,
-//                 child: Text(value),
-//               );
-//             }).toList(),
-//             dropdownColor: ColorConstant.putih,
-//           ),
-//         ),
-        
-//       ],
-//     );
-//   }
-// }

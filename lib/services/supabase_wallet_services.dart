@@ -1,6 +1,6 @@
 // services/supabase_wallet_service.dart
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:economate_mobile/models/wallet.dart';
+import 'package:economate_mobile/models/wallet_model.dart';
 
 class SupabaseWalletService {
   final SupabaseClient _supabase;
