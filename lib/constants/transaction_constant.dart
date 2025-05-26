@@ -4,10 +4,12 @@ class TransactionConstants {
     'transportasi': 'transport',
     'hiburan': 'entertainment',
     'belanja': 'shopping',
+    'pekerjaan' : 'work',
+    'saku' : 'pcoket',
     'gaji': 'salary',
     'investasi': 'investment',
     'hadiah': 'gift',
-    // Add more mappings as needed
+    'lainnya' : 'more'
   };
 
   static const List<String> incomeCategories = [
@@ -15,6 +17,6 @@ class TransactionConstants {
   ];
 
   static const List<String> expenseCategories = [
-    'Makanan', 'Transportasi', 'Hiburan', 'Belanja', 'Lainnya'
+    'Makanan', 'Transportasi', 'Hiburan', 'Belanja', 'Pekerjaan', 'Olahraga','Lainnya'
   ];
 }
