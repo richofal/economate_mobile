@@ -32,15 +32,11 @@ class _WalletScreenState extends State<WalletScreen> {
   Future<void> _loadWallets() async {
     if (!mounted) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     try {
       final userId = _supabase.auth.currentUser?.id;
       if (userId == null) return;
-
-      debugPrint('Memuat data wallet...'); // Log debugging
 
       final response = await _supabase
           .from('wallets')
@@ -51,18 +47,19 @@ class _WalletScreenState extends State<WalletScreen> {
       final wallets =
           (response as List).map((json) => Wallet.fromMap(json)).toList();
 
-      debugPrint('Ditemukan ${wallets.length} wallet'); // Log debugging
-
-      setState(() {
-        _wallets = wallets;
-        _totalBalance = wallets.fold(
-          0.0,
-          (sum, wallet) => sum + wallet.balance,
-        );
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _wallets = wallets;
+          _totalBalance = wallets.fold(
+            0.0,
+            (sum, wallet) => sum + wallet.balance,
+          );
+          _isLoading = false;
+          _errorMessage = null; // Reset error jika sebelumnya ada
+        });
+      }
     } catch (e) {
-      debugPrint('Error: $e'); // Log error
+      debugPrint('Error: $e');
       if (!mounted) return;
       setState(() {
         _errorMessage = 'Gagal memuat data';
@@ -80,9 +77,7 @@ class _WalletScreenState extends State<WalletScreen> {
     if (userId == null) return;
 
     _supabase
-        .channel(
-          'wallet_changes_${userId.substring(0, 8)}',
-        ) // Nama channel unik
+        .channel('wallet_changes_${userId.substring(0, 8)}')
         .onPostgresChanges(
           event: PostgresChangeEvent.all,
           schema: 'public',
@@ -93,8 +88,8 @@ class _WalletScreenState extends State<WalletScreen> {
             value: userId,
           ),
           callback: (payload) {
-            debugPrint('Realtime update: ${payload.eventType}');
-            if (mounted) _loadWallets();
+            debugPrint('Realtime update: ${payload.eventType}'); // Debugging
+            if (mounted) _loadWallets(); // Paksa refresh data
           },
         )
         .subscribe();
@@ -164,7 +159,11 @@ class _WalletScreenState extends State<WalletScreen> {
                       'name': name,
                       'balance': balance,
                     });
+
                     if (!mounted) return;
+
+                    // Perbarui daftar dompet setelah data disimpan
+                    await _loadWallets();
                     Navigator.pop(context);
                   } catch (e) {
                     if (!mounted) return;
@@ -326,15 +325,16 @@ class _WalletScreenState extends State<WalletScreen> {
                             color: ColorConstant.hitamshadow,
                             spreadRadius: 1,
                             blurRadius: 7,
-                          )
-                        ]
+                          ),
+                        ],
                       ),
                       child: Center(
-                        child: Text('Tambahkan Dompet',
+                        child: Text(
+                          'Tambahkan Dompet',
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
-                            color: ColorConstant.putih
+                            color: ColorConstant.putih,
                           ),
                         ),
                       ),

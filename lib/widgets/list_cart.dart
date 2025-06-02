@@ -10,12 +10,16 @@ class ListCart extends StatelessWidget {
   final double isPrice;
 
   const ListCart({
-    super.key, required this.isName, required this.isQuantity, required this.isPrice,
+    super.key,
+    required this.isName,
+    required this.isQuantity,
+    required this.isPrice,
   });
 
   String quantity(double amount) {
     int intAmount = amount.toInt();
-    return '$intAmount''x';
+    return '$intAmount'
+        'x';
   }
 
   String formatMoney(double amount) {
@@ -34,15 +38,21 @@ class ListCart extends StatelessWidget {
             SizedBox(
               width: 200,
               child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    isName,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: ColorConstant.hitam,
+                  SizedBox(
+                    width: 150, // Sesuaikan lebar sesuai kebutuhan
+                    child: Text(
+                      isName,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: ColorConstant.hitam,
+                      ),
+                      overflow:
+                          TextOverflow
+                              .ellipsis, // Menambahkan ".." jika teks dipotong
+                      maxLines: 1, // Membatasi teks ke 1 baris
                     ),
                   ),
                   Text(
@@ -84,7 +94,7 @@ class ListCart extends StatelessWidget {
             ),
           ],
         ),
-        
+
         const Gap(12),
       ],
     );

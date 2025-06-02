@@ -9,4 +9,8 @@ class ColorConstant {
   static Color hitam = Color(0xFF303030);
   static Color hitamshadow = Color(0x2B000000);
   static Color merah = Color(0xFFF12020);
+  static Color hijau = Color(0xFF89AC46);
+  static Color kuning = Color(0xFFFCF259);
+  static Color ungu = Color(0xFF483AA0);
+  static Color orange = Color(0xFFF97A00);
 }

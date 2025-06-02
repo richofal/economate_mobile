@@ -3,7 +3,6 @@ import 'package:economate_mobile/models/transaction_model.dart';
 import 'package:economate_mobile/provider/transaction_provider.dart';
 import 'package:economate_mobile/provider/wallet_provider.dart';
 import 'package:economate_mobile/widgets/dropdown_category.dart';
-import 'package:economate_mobile/widgets/dropdown_insert.dart';
 import 'package:economate_mobile/widgets/button_insert.dart';
 import 'package:economate_mobile/widgets/dropdown_wallet.dart';
 import 'package:economate_mobile/widgets/textfield_insert.dart';
@@ -97,7 +96,9 @@ class _PengeluaranState extends State<Pengeluaran> {
                           'Makanan',
                           'Transportasi',
                           'Hiburan',
-                          'Belanja',
+                          'Belanjaan',
+                          'Pekerjaan',
+                          'Olahraga',
                           'Lainnya',
                         ],
                         onChanged: (value) => _selectedCategory = value,

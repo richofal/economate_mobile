@@ -1,4 +1,5 @@
 import 'package:economate_mobile/pages/analysis.dart';
+import 'package:economate_mobile/pages/piechart.dart';
 import 'package:economate_mobile/pages/shopping.dart';
 import 'package:economate_mobile/pages/splitbill.dart';
 import 'package:economate_mobile/widgets/background_home.dart';
@@ -11,12 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:economate_mobile/models/wallet_model.dart';
 import 'package:economate_mobile/models/transaction_model.dart'; // Added import
 import 'package:economate_mobile/provider/transaction_provider.dart';
 import 'package:provider/provider.dart'; // Added import
-import 'package:intl/intl.dart'; // Added import
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,9 +38,36 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadWallets();
-    _loadRecentTransactions();
-    _setupRealtimeListener(); // Added call to setup listener
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadWallets();
+      _loadRecentTransactions();
+    });
+    _setupRealtimeListener();
+    _setupTransactionListener();
+  }
+
+  // Tambahkan method baru untuk listener transaksi
+  void _setupTransactionListener() {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return;
+
+    _supabase
+        .channel('transaction_changes_${userId.substring(0, 8)}')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'transactions', // Ganti dengan nama tabel transaksi Anda
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'user_id',
+            value: userId,
+          ),
+          callback: (payload) {
+            if (mounted)
+              _loadRecentTransactions(); // Refresh saat ada perubahan
+          },
+        )
+        .subscribe();
   }
 
   Future<void> _loadRecentTransactions() async {
@@ -47,13 +75,29 @@ class _HomePageState extends State<HomePage> {
       context,
       listen: false,
     );
-    await transactionProvider.loadTransactions();
 
-    if (mounted) {
-      setState(() {
-        _recentTransactions = transactionProvider.transactions.take(5).toList();
-        _calculateTotals(transactionProvider.transactions);
-      });
+    try {
+      await transactionProvider.loadTransactions();
+
+      if (mounted) {
+        setState(() {
+          _recentTransactions =
+              (transactionProvider.transactions
+                      .where((t) => t.date != null)
+                      .toList()
+                    ..sort((a, b) => b.date!.compareTo(a.date!)))
+                  .take(7)
+                  .toList();
+
+          _calculateTotals(transactionProvider.transactions);
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load transactions: $e')),
+        );
+      }
     }
   }
 
@@ -164,6 +208,7 @@ class _HomePageState extends State<HomePage> {
 
               const Gap(20),
 
+              // Ganti bagian yang menggunakan SaldokecilHome dengan ini:
               Container(
                 height: 64,
                 width: double.infinity,
@@ -193,6 +238,16 @@ class _HomePageState extends State<HomePage> {
                       SaldokecilHome(
                         type: 'Pemasukan',
                         nominal: _totalIncome.toStringAsFixed(0),
+                        isIncome: true,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => Piechart(isIncomePiechart: true),
+                            ),
+                          );
+                        },
                       ),
 
                       Container(
@@ -204,6 +259,17 @@ class _HomePageState extends State<HomePage> {
                       SaldokecilHome(
                         type: 'Pengeluaran',
                         nominal: _totalExpense.toStringAsFixed(0),
+                        isIncome: false,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      Piechart(isIncomePiechart: false),
+                            ),
+                          );
+                        },
                       ),
 
                       SvgPicture.asset(
@@ -245,22 +311,28 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  child: _isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          padding: EdgeInsets.only(top: 6),
-                          itemCount: _recentTransactions.length,
-                          itemBuilder: (context, index) {
-                            final transaction = _recentTransactions[index];
-                            return ListHistory(
-                              category: transaction.category,
-                              title: transaction.title,
-                              date: transaction.date,
-                              amount: transaction.amount,
-                              isIncome: transaction.isIncome,
-                            );
-                          },
-                        ),
+                  child:
+                      _isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                            padding: EdgeInsets.only(top: 6),
+                            itemCount: _recentTransactions.length,
+                            itemBuilder: (context, index) {
+                              final transaction = _recentTransactions[index];
+                              return Dismissible(
+                                key: Key(transaction.id),
+                                child: ListHistory(
+                                  category: transaction.category,
+                                  title: transaction.title,
+                                  date:
+                                      transaction
+                                          .date, // Pass the DateTime directly
+                                  amount: transaction.amount,
+                                  isIncome: transaction.isIncome,
+                                ),
+                              );
+                            },
+                          ),
                 ),
               ),
             ],

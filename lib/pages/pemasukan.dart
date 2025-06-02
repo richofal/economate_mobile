@@ -3,7 +3,6 @@ import 'package:economate_mobile/models/transaction_model.dart';
 import 'package:economate_mobile/provider/transaction_provider.dart';
 import 'package:economate_mobile/provider/wallet_provider.dart';
 import 'package:economate_mobile/widgets/dropdown_category.dart';
-import 'package:economate_mobile/widgets/dropdown_insert.dart';
 import 'package:economate_mobile/widgets/button_insert.dart';
 import 'package:economate_mobile/widgets/dropdown_wallet.dart';
 import 'package:economate_mobile/widgets/textfield_insert.dart';
@@ -93,7 +92,7 @@ class _PemasukanState extends State<Pemasukan> {
                       DropdownCategory(
                         isHint: 'Kategori',
                         isIncome: true,
-                        items: const ['Gaji', 'Hadiah', 'Investasi', 'Lainnya'],
+                        items: const ['Saku','Gaji', 'Hadiah', 'Investasi', 'Lainnya'],
                         onChanged: (value) => _selectedCategory = value,
                         validator:
                             (value) => value == null ? 'Pilih kategori' : null,

@@ -26,13 +26,32 @@ class ListHistory extends StatelessWidget {
   });
 
   // Map category to icon
-  String _getIconPath(String category) {
-    // Use predefined mapping from constants
-    final iconName = category.toLowerCase();
-    
-    // Return the SVG asset path
-    return "assets/svgs/"+iconName+".svg";
-  }
+  // Map category to icon
+String _getIconPath(String category) {
+  // Convert category to lowercase and remove any whitespace
+  final categoryKey = category.toLowerCase().trim();
+  
+  // Map category to corresponding SVG file name
+  final iconMap = {
+    'makanan': 'makanan',
+    'transportasi': 'transportasi',
+    'hiburan': 'hiburan',
+    'belanjaan': 'belanjaan', // Perhatikan mapping ini
+    'pekerjaan': 'pekerjaan',
+    'olahraga': 'olahraga',
+    'saku': 'saku',
+    'gaji': 'gaji',
+    'investasi': 'investasi',
+    'hadiah': 'hadiah',
+    'lainnya': 'lainnya',
+  };
+
+  // Get the icon name from the map, default to 'lainnya' if not found
+  final iconName = iconMap[categoryKey] ?? 'lainnya';
+  
+  // Return the SVG asset path
+  return "assets/svgs/$iconName.svg";
+}
 
   // Format currency with proper sign
   String _formatCurrency(double amount, bool isIncome) {
@@ -71,8 +90,8 @@ class ListHistory extends StatelessWidget {
                 child: Center(
                   child: SvgPicture.asset(
                     _getIconPath(category),
-                    height: 24,
-                    width: 24,
+                    height: 36,
+                    width: 36,
                     colorFilter: ColorFilter.mode(
                       isIncome ? ColorConstant.birumuda : ColorConstant.merah,
                       BlendMode.srcIn,

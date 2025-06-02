@@ -31,7 +31,9 @@ class Transaction {
       category: map['category'] ?? '',
       amount: (map['amount'] as num?)?.toDouble() ?? 0.0,
       walletId: map['wallet_id'] ?? '',
-      date: DateTime.parse(map['date']), // Parsing dari format DATE
+      date: map['date'] != null 
+          ? DateTime.parse(map['date']) 
+          : DateTime.now(), // Fallback if null
       isIncome: map['is_income'] ?? false,
       createdAt: DateTime.parse(map['created_at']),
     );

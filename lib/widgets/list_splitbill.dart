@@ -8,12 +8,14 @@ class ListSplitbill extends StatelessWidget {
   final String isName;
   final String isDate;
   final double isNominal;
+  final VoidCallback onDeletePressed;
 
   const ListSplitbill({
     super.key,
     required this.isName,
     required this.isDate,
     required this.isNominal,
+    required this.onDeletePressed,
   });
 
   String formatMoney(double amount) {
@@ -63,35 +65,59 @@ class ListSplitbill extends StatelessWidget {
                 ),
               ),
               trailing: SizedBox(
-                width: 170,
+                width: 210,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'Rp',
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: ColorConstant.hitam,
-                      ),
+                        Row(
+                          children: [
+                            Text(
+                              'Rp',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: ColorConstant.hitam,
+                              ),
+                            ),
+                            const Gap(1),
+                            Text(
+                              formatMoney(isNominal),
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: ColorConstant.hitam,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(4),
+                        GestureDetector(
+                          onTap: onDeletePressed,
+                          child: Container(
+                            height: 28,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: ColorConstant.birumuda,
+                              borderRadius: BorderRadius.all(Radius.circular(6))
+                            ),
+                            child: Center(
+                              child: Text('Lunas',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: ColorConstant.putih
+                                  ),
+                                ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const Gap(1),
-                    Text(
-                      formatMoney(isNominal),
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: ColorConstant.hitam,
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ),
           ),
-        ),
-
         const Gap(10),
       ],
     );
