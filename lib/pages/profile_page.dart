@@ -1,4 +1,9 @@
 import 'package:economate_mobile/constants/color_constant.dart';
+import 'package:economate_mobile/pages/alamat.dart';
+import 'package:economate_mobile/pages/gender.dart';
+import 'package:economate_mobile/pages/profile.dart';
+import 'package:economate_mobile/pages/telpon.dart';
+import 'package:economate_mobile/pages/tentang.dart';
 import 'package:economate_mobile/pages/wallet_screen.dart';
 import 'package:economate_mobile/widgets/background_profile.dart';
 import 'package:economate_mobile/widgets/label_profile.dart';
@@ -73,32 +78,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     LabelProfile(isLabel: 'Profil ku'),
 
-                    TextviewProfile(
-                      isIcon: 'nama',
-                      isText: 'Muhammad Herjuna Taraka',
-                    ),
+                    ProfileList(isIcon: 'nama', isText: 'Muhammad Herjuna Taraka', isPage: Profile()),
+                    ProfileList(isIcon: 'gender', isText: 'Laki-laki', isPage: Gender()),
+                    ProfileList(isIcon: 'location', isText: 'Indonesia, Jawa timur', isPage: Alamat(),),
 
                     const Gap(2),
 
                     LabelProfile(isLabel: 'Pengaturan Akun'),
 
-                    // TextviewProfile(isIcon: 'akun', isText: 'Akun ku')
                     ProfileList(isIcon: 'akun', isText: 'Akun ku', isPage: Akun()),
                     ProfileList(isIcon: 'dompet', isText: 'Dompet ku', isPage: WalletScreen()),
-                    TextviewProfile(isIcon: 'kunci', isText: 'Kunci Aplikasi'),
-
-                    const Gap(2),
-
-                    LabelProfile(isLabel: 'Pengaturan Aplikasi'),
-
-                    TextviewProfile(isIcon: 'bahasa', isText: 'Bahasa'),
-                    TextviewProfile(isIcon: 'tampilan', isText: 'Tampilan'),
+                    ProfileList(isIcon: 'telp', isText: '+62 812 3456 7890', isPage: Telpon(),),
 
                     const Gap(2),
 
                     LabelProfile(isLabel: 'Bantuan'),
-
-                    TextviewProfile(isIcon: 'tentang', isText: 'Tentang kami'),
+                    ProfileList(isIcon: 'tentang', isText: 'Tentang kami', isPage: Tentang()),
                   ],
                 ),
               ),

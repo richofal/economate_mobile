@@ -156,7 +156,7 @@ class _AnalysisState extends State<Analysis> {
                                 dataSource: chartData,
                                 xValueMapper: (ChartData data, _) => data.month,
                                 yValueMapper: (ChartData data, _) => data.expense,
-                                color: Colors.red[200], // Ganti dengan warna yang sesuai
+                                color: ColorConstant.merah, // Ganti dengan warna yang sesuai
                               ),
                             ],
                           ),

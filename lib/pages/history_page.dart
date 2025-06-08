@@ -233,7 +233,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     _FilterButton(
                       label: 'Pengeluaran',
-                      width: 130,
+                      width: 110,
                       isActive: _transactionType == 'Pengeluaran',
                       onTap: () {
                         setState(() {
@@ -246,7 +246,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     const Gap(6),
                     _FilterButton(
                       label: 'Pemasukan',
-                      width: 130,
+                      width: 110,
                       isActive: _transactionType == 'Pemasukan',
                       onTap: () {
                         setState(() {
@@ -267,7 +267,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     // Filter Kategori
                     _FilterButton(
                       label: _category,
-                      width: 150,
+                      width: 130,
                       isActive: _category != 'Semua',
                       onTap: () {
                         _showCategoryFilter(context);
@@ -391,15 +391,6 @@ class _FilterButton extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   color:
                       isActive ? ColorConstant.putih : ColorConstant.birumuda,
-                ),
-              ),
-              SvgPicture.asset(
-                'assets/svgs/arrowsolid.svg',
-                height: 9,
-                width: 9,
-                colorFilter: ColorFilter.mode(
-                  isActive ? ColorConstant.putih : ColorConstant.birumuda,
-                  BlendMode.srcIn,
                 ),
               ),
             ],

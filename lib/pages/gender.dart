@@ -5,13 +5,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class Akun extends StatelessWidget {
-  const Akun({super.key});
+class Gender extends StatelessWidget {
+  const Gender({super.key});
 
   @override
   Widget build(BuildContext context) {
     final user = Supabase.instance.client.auth.currentUser;
-    
+
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -30,7 +30,7 @@ class Akun extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Akun',
+                          'Gender',
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 42,
                             fontWeight: FontWeight.w700,
@@ -62,7 +62,7 @@ class Akun extends StatelessWidget {
                           children: [
                             const Gap(10),
                             Text(
-                              user?.email ?? 'Guest',
+                              'Laki-laki',
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -80,26 +80,11 @@ class Akun extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const Gap(12),
+
                     GestureDetector(
-                      onTap: () async {
-                        try {
-                          await Supabase.instance.client.auth.signOut();
-                          // Navigate to sign in page and clear all previous routes
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            '/signIn',
-                            (Route<dynamic> route) => false,
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Gagal logout: $e'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      },
+                      onTap: () async {},
                       child: Container(
                         height: 50,
                         width: double.infinity,
@@ -111,20 +96,21 @@ class Akun extends StatelessWidget {
                               color: ColorConstant.hitamshadow,
                               spreadRadius: 1,
                               blurRadius: 7,
-                            )
-                          ]
+                            ),
+                          ],
                         ),
                         child: Center(
-                          child: Text('Log out',
+                          child: Text(
+                            'Edit',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: ColorConstant.putih
+                              color: ColorConstant.putih,
                             ),
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
