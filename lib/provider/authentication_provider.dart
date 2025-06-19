@@ -54,8 +54,18 @@ class AuthenticationProvider with ChangeNotifier {
       final AuthResponse response = await _supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'username': username},
+        data: {'username': username}, // Ini untuk user_metadata
       );
+
+      // Update profiles table dengan lebih banyak field
+      await _supabase.from('profiles').upsert({
+        'id': response.user!.id,
+        'full_name': username, // Default sama dengan username
+        'display_name': username, // Gunakan username sebagai display_name
+        'email': email,
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+      });
 
       if (response.user == null) {
         throw Exception('Registrasi gagal: User tidak terdaftar');
@@ -90,11 +100,13 @@ class AuthenticationProvider with ChangeNotifier {
       if (response.session != null) {
         _isLoggedIn = true;
         _currentUser = response.user;
+        notifyListeners();
+        // Hapus navigasi dari sini
       } else {
         throw Exception('Login gagal: Sesi tidak valid');
       }
     } on AuthException catch (e) {
-      _setError(e.message); // Tampilkan error spesifik dari Supabase
+      _setError(e.message);
     } finally {
       _setLoading(false);
     }
