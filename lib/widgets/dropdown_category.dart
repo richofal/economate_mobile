@@ -10,6 +10,7 @@ class DropdownCategory extends StatelessWidget {
   final Function(String?) onChanged;
   final String? Function(String?)? validator;
   final String? initialValue;
+  final String? selectedValue;
 
   const DropdownCategory({
     super.key,
@@ -19,6 +20,7 @@ class DropdownCategory extends StatelessWidget {
     required this.onChanged,
     this.validator,
     this.initialValue,
+    this.selectedValue,
   });
 
   @override
@@ -48,7 +50,7 @@ class DropdownCategory extends StatelessWidget {
             color: ColorConstant.abu,
           ),
         ),
-        value: initialValue,
+        value: selectedValue,
         items: items.map((String value) {
           return DropdownMenuItem<String>(
             value: value,

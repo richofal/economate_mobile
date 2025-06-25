@@ -18,6 +18,7 @@ class _AlamatState extends State<Alamat> {
   String _province = 'Provinsi';
   String _city = 'Kota';
   String _address = 'Alamat';
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -26,50 +27,91 @@ class _AlamatState extends State<Alamat> {
   }
 
   Future<void> _loadAddress() async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId != null) {
-      final response = await supabase
-          .from('profiles')
-          .select('country, province, city, address')
-          .eq('id', userId)
-          .single();
+    if (!mounted) return;
+    
+    setState(() {
+      _isLoading = true;
+    });
 
-      if (response != null) {
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final response = await supabase
+            .from('profiles')
+            .select('country, province, city, address')
+            .eq('id', userId)
+            .single()
+            .timeout(const Duration(seconds: 5));
+
+        if (response != null && mounted) {
+          setState(() {
+            _country = response['country'] ?? 'Indonesia';
+            _province = response['province'] ?? 'Jawa Timur';
+            _city = response['city'] ?? 'Surabaya';
+            _address = response['address'] ?? 'Jl. Rajawali Utara IV No.8';
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memuat alamat: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
         setState(() {
-          _country = response['country'] ?? 'Indonesia';
-          _province = response['province'] ?? 'Jawa Timur';
-          _city = response['city'] ?? 'Surabaya';
-          _address = response['address'] ?? 'Jl. Rajawali Utara IV No.8';
+          _isLoading = false;
         });
       }
     }
   }
 
   Future<void> _updateAddress(Map<String, dynamic> updates) async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId != null) {
-      final response = await supabase
-          .from('profiles')
-          .upsert({
-            'id': userId,
-            ...updates,
-            'updated_at': DateTime.now().toIso8601String(),
-          });
+    if (!mounted || _isLoading) return;
 
-      if (response.error == null) {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final response = await supabase
+            .from('profiles')
+            .update({
+              ...updates,
+              'updated_at': DateTime.now().toIso8601String(),
+            })
+            .eq('id', userId)
+            .select()
+            .single()
+            .timeout(const Duration(seconds: 5));
+
+        if (mounted) {
+          setState(() {
+            if (updates.containsKey('country')) _country = response['country'] ?? updates['country'];
+            if (updates.containsKey('province')) _province = response['province'] ?? updates['province'];
+            if (updates.containsKey('city')) _city = response['city'] ?? updates['city'];
+            if (updates.containsKey('address')) _address = response['address'] ?? updates['address'];
+          });
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Alamat berhasil diperbarui')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memperbarui alamat: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
         setState(() {
-          if (updates.containsKey('country')) _country = updates['country'];
-          if (updates.containsKey('province')) _province = updates['province'];
-          if (updates.containsKey('city')) _city = updates['city'];
-          if (updates.containsKey('address')) _address = updates['address'];
+          _isLoading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Alamat berhasil diperbarui')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memperbarui alamat: ${response.error?.message}')),
-        );
       }
     }
   }
@@ -87,14 +129,14 @@ class _AlamatState extends State<Alamat> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
+            child: const Text('Batal'),
           ),
           TextButton(
-            onPressed: () {
-              _updateAddress({field: controller.text});
+            onPressed: () async {
               Navigator.pop(context);
+              await _updateAddress({field: controller.text});
             },
-            child: Text('Simpan'),
+            child: const Text('Simpan'),
           ),
         ],
       ),
@@ -110,29 +152,29 @@ class _AlamatState extends State<Alamat> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit Alamat Lengkap'),
+        title: const Text('Edit Alamat Lengkap'),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: countryController,
-                decoration: InputDecoration(labelText: 'Negara'),
+                decoration: const InputDecoration(labelText: 'Negara'),
               ),
               const Gap(10),
               TextField(
                 controller: provinceController,
-                decoration: InputDecoration(labelText: 'Provinsi'),
+                decoration: const InputDecoration(labelText: 'Provinsi'),
               ),
               const Gap(10),
               TextField(
                 controller: cityController,
-                decoration: InputDecoration(labelText: 'Kota'),
+                decoration: const InputDecoration(labelText: 'Kota'),
               ),
               const Gap(10),
               TextField(
                 controller: addressController,
-                decoration: InputDecoration(labelText: 'Alamat'),
+                decoration: const InputDecoration(labelText: 'Alamat'),
               ),
             ],
           ),
@@ -140,22 +182,85 @@ class _AlamatState extends State<Alamat> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
+            child: const Text('Batal'),
           ),
           TextButton(
-            onPressed: () {
-              _updateAddress({
+            onPressed: () async {
+              Navigator.pop(context);
+              await _updateAddress({
                 'country': countryController.text,
                 'province': provinceController.text,
                 'city': cityController.text,
                 'address': addressController.text,
               });
-              Navigator.pop(context);
             },
-            child: Text('Simpan'),
+            child: const Text('Simpan'),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAddressField(String label, String value, VoidCallback onTap) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: ColorConstant.abu,
+              ),
+            ),
+          ],
+        ),
+        const Gap(10),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: 50,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: ColorConstant.putih,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: ColorConstant.birushadow,
+                  spreadRadius: 1,
+                  blurRadius: 8,
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12, right: 16),
+              child: Row(
+                children: [
+                  const Gap(10),
+                  Text(
+                    value,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: ColorConstant.abu,
+                    ),
+                  ),
+                  const Spacer(),
+                  SvgPicture.asset(
+                    'assets/svgs/pencil.svg',
+                    height: 24,
+                    width: 24,
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -170,7 +275,7 @@ class _AlamatState extends State<Alamat> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -188,243 +293,29 @@ class _AlamatState extends State<Alamat> {
                         ),
                       ],
                     ),
-
                     const Gap(10),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Negara',
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: ColorConstant.abu,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const Gap(10),
-
-                    GestureDetector(
-                      onTap: () => _showEditDialog('Negara', _country, 'country'),
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: ColorConstant.putih,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: ColorConstant.birushadow,
-                              spreadRadius: 1,
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 12, right: 16),
-                          child: Row(
-                            children: [
-                              const Gap(10),
-                              Text(
-                                _country,
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorConstant.abu,
-                                ),
-                              ),
-                              Spacer(),
-                              SvgPicture.asset(
-                                'assets/svgs/pensil.svg',
-                                height: 24,
-                                width: 24,
-                                fit: BoxFit.contain,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const Gap(10),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Provinsi',
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: ColorConstant.abu,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const Gap(10),
-
-                    GestureDetector(
-                      onTap: () => _showEditDialog('Provinsi', _province, 'province'),
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: ColorConstant.putih,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: ColorConstant.birushadow,
-                              spreadRadius: 1,
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 12, right: 16),
-                          child: Row(
-                            children: [
-                              const Gap(10),
-                              Text(
-                                _province,
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorConstant.abu,
-                                ),
-                              ),
-                              Spacer(),
-                              SvgPicture.asset(
-                                'assets/svgs/pensil.svg',
-                                height: 24,
-                                width: 24,
-                                fit: BoxFit.contain,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const Gap(10),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Kota',
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: ColorConstant.abu,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const Gap(10),
-
-                    GestureDetector(
-                      onTap: () => _showEditDialog('Kota', _city, 'city'),
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: ColorConstant.putih,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: ColorConstant.birushadow,
-                              spreadRadius: 1,
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 12, right: 16),
-                          child: Row(
-                            children: [
-                              const Gap(10),
-                              Text(
-                                _city,
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorConstant.abu,
-                                ),
-                              ),
-                              Spacer(),
-                              SvgPicture.asset(
-                                'assets/svgs/pensil.svg',
-                                height: 24,
-                                width: 24,
-                                fit: BoxFit.contain,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    _buildAddressField(
+                      'Negara', 
+                      _country, 
+                      () => _showEditDialog('Negara', _country, 'country'),
                     ),
                     const Gap(10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Alamat',
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: ColorConstant.abu,
-                          ),
-                        ),
-                      ],
+                    _buildAddressField(
+                      'Provinsi', 
+                      _province, 
+                      () => _showEditDialog('Provinsi', _province, 'province'),
                     ),
-
                     const Gap(10),
-
-                    GestureDetector(
-                      onTap: () => _showEditDialog('Alamat', _address, 'address'),
-                      child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: ColorConstant.putih,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: ColorConstant.birushadow,
-                              spreadRadius: 1,
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 12, right: 16),
-                          child: Row(
-                            children: [
-                              const Gap(10),
-                              Text(
-                                _address,
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorConstant.abu,
-                                ),
-                              ),
-                              Spacer(),
-                              SvgPicture.asset(
-                                'assets/svgs/pensil.svg',
-                                height: 24,
-                                width: 24,
-                                fit: BoxFit.contain,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    _buildAddressField(
+                      'Kota', 
+                      _city, 
+                      () => _showEditDialog('Kota', _city, 'city'),
+                    ),
+                    const Gap(10),
+                    _buildAddressField(
+                      'Alamat', 
+                      _address, 
+                      () => _showEditDialog('Alamat', _address, 'address'),
                     ),
                     const Gap(12),
                     GestureDetector(
@@ -475,6 +366,10 @@ class _AlamatState extends State<Alamat> {
                   },
                 ),
               ),
+              if (_isLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
             ],
           ),
         ),

@@ -5,6 +5,7 @@ class TransactionConstants {
     'hiburan': 'entertainment',
     'belanjaan': 'shopping',
     'pekerjaan' : 'work',
+    'pakaian' : 'clothes',
     'olahraga' : 'sport',
     'saku' : 'pcoket',
     'gaji': 'salary',
@@ -18,6 +19,6 @@ class TransactionConstants {
   ];
 
   static const List<String> expenseCategories = [
-    'Makanan', 'Transportasi', 'Hiburan', 'Belanja', 'Pekerjaan', 'Olahraga','Lainnya'
+    'Makanan', 'Transportasi', 'Hiburan', 'Belanja', 'Pekerjaan', 'Pakaian', 'Olahraga','Lainnya'
   ];
 }

@@ -1,3 +1,4 @@
+import 'package:economate_mobile/provider/refresh_provider.dart';
 import 'package:economate_mobile/provider/transaction_provider.dart';
 import 'package:economate_mobile/provider/wallet_provider.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => RefreshProvider()),
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(
           create: (_) => TransactionProvider()..loadTransactions(),

@@ -1,9 +1,10 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/models/transaction_model.dart';
+import 'package:economate_mobile/pages/edit_pemasukan.dart';
+import 'package:economate_mobile/pages/edit_pengeluaran.dart';
 import 'package:economate_mobile/provider/transaction_provider.dart';
-import 'package:economate_mobile/widgets/listhistory.dart';
+import 'package:economate_mobile/widgets/list_history.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:provider/provider.dart';
@@ -180,6 +181,41 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
+  Future<void> _deleteTransaction(String id) async {
+    try {
+      final transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
+      await transactionProvider.deleteTransaction(id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Transaksi berhasil dihapus')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menghapus transaksi: $e')),
+      );
+    }
+  }
+
+  void _editTransaction(BuildContext context, String id) {
+    final transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
+    final transaction = transactionProvider.transactions.firstWhere((t) => t.id == id);
+    
+    if (transaction.isIncome) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditPemasukanPage(transaction: transaction),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditPengeluaranPage(transaction: transaction),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final transactionProvider = Provider.of<TransactionProvider>(context);
@@ -329,11 +365,14 @@ class _HistoryPageState extends State<HistoryPage> {
                               itemBuilder: (context, index) {
                                 final transaction = filteredTransactions[index];
                                 return ListHistory(
+                                  id: transaction.id, // Tambahkan ID
                                   category: transaction.category,
                                   title: transaction.title,
                                   date: transaction.date,
                                   amount: transaction.amount,
                                   isIncome: transaction.isIncome,
+                                  onDelete: (id) => _deleteTransaction(id),
+                                  onEdit: (id) => _editTransaction(context, id),
                                 );
                               },
                             ),
@@ -400,3 +439,4 @@ class _FilterButton extends StatelessWidget {
     );
   }
 }
+

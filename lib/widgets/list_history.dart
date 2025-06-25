@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class ListHistory extends StatelessWidget {
+  final String id;
   final String category;
   final String title;
   final DateTime date;
@@ -13,9 +14,12 @@ class ListHistory extends StatelessWidget {
   final bool isIncome;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final Function(String)? onDelete;
+  final Function(String)? onEdit; 
 
   const ListHistory({
     super.key,
+    required this.id,
     required this.category,
     required this.title,
     required this.date,
@@ -23,6 +27,8 @@ class ListHistory extends StatelessWidget {
     required this.isIncome,
     this.onTap,
     this.onLongPress,
+    this.onDelete,
+    this.onEdit,
   });
 
   // Map category to icon
@@ -38,6 +44,7 @@ String _getIconPath(String category) {
     'hiburan': 'hiburan',
     'belanjaan': 'belanjaan', // Perhatikan mapping ini
     'pekerjaan': 'pekerjaan',
+    'pakaian' : 'pakaian',
     'olahraga': 'olahraga',
     'saku': 'saku',
     'gaji': 'gaji',
@@ -65,6 +72,69 @@ String _getIconPath(String category) {
     return DateFormat('dd MMMM yyyy').format(date);
   }
 
+  void _showEditDeleteOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.edit, color: ColorConstant.birumuda),
+                title: Text('Edit Transaksi',
+                    style: GoogleFonts.plusJakartaSans()),
+                onTap: () {
+                  Navigator.pop(context);
+                  onEdit?.call(id);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete, color: ColorConstant.merah),
+                title: Text('Hapus Transaksi',
+                    style: GoogleFonts.plusJakartaSans()),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showDeleteConfirmation(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Konfirmasi Hapus',
+              style: GoogleFonts.plusJakartaSans()),
+          content: Text('Apakah Anda yakin ingin menghapus transaksi ini?',
+              style: GoogleFonts.plusJakartaSans()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Batal',
+                  style: GoogleFonts.plusJakartaSans(
+                      color: ColorConstant.birumuda)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                onDelete?.call(id);
+              },
+              child: Text('Hapus',
+                  style: GoogleFonts.plusJakartaSans(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -73,7 +143,13 @@ String _getIconPath(String category) {
         children: [
           InkWell(
             onTap: onTap,
-            onLongPress: onLongPress,
+            onLongPress: () {
+              if (onLongPress != null) {
+                onLongPress!();
+              } else {
+                _showEditDeleteOptions(context);
+              }
+            },
             borderRadius: BorderRadius.circular(8),
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -136,4 +212,6 @@ String _getIconPath(String category) {
       ),
     );
   }
+
+  
 }

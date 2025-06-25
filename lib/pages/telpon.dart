@@ -14,7 +14,8 @@ class Telpon extends StatefulWidget {
 
 class _TelponState extends State<Telpon> {
   final supabase = Supabase.instance.client;
-  String _phoneNumber = '+62 812 3456 7890';
+  String _phoneNumber = 'Nomor telpon';
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -23,40 +24,85 @@ class _TelponState extends State<Telpon> {
   }
 
   Future<void> _loadPhoneNumber() async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId != null) {
-      final response = await supabase
-          .from('profiles')
-          .select('phone')
-          .eq('id', userId)
-          .single();
+    if (!mounted) return;
+    
+    setState(() {
+      _isLoading = true;
+    });
 
-      if (response != null) {
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final response = await supabase
+            .from('profiles')
+            .select('phone')
+            .eq('id', userId)
+            .single()
+            .timeout(const Duration(seconds: 5));
+
+        if (response != null && mounted) {
+          setState(() {
+            _phoneNumber = response['phone'] ?? 'Nomor telpon';
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memuat nomor telepon: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
         setState(() {
-          _phoneNumber = response['phone'] ?? '+62 812 3456 7890';
+          _isLoading = false;
         });
       }
     }
   }
 
   Future<void> _updatePhoneNumber(String newPhone) async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId != null) {
-      final response = await supabase
-          .from('profiles')
-          .upsert({
-            'id': userId,
-            'phone': newPhone,
-            'updated_at': DateTime.now().toIso8601String(),
-          });
+    if (!mounted || _isLoading) return;
 
-      if (response.error == null) {
-        setState(() {
-          _phoneNumber = newPhone;
-        });
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final response = await supabase
+            .from('profiles')
+            .update({
+              'phone': newPhone,
+              'updated_at': DateTime.now().toIso8601String(),
+            })
+            .eq('id', userId)
+            .select()
+            .single()
+            .timeout(const Duration(seconds: 5));
+
+        if (mounted) {
+          setState(() {
+            _phoneNumber = response['phone'] ?? newPhone;
+          });
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Nomor telepon berhasil diperbarui')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Nomor telepon berhasil diperbarui')),
+          SnackBar(content: Text('Gagal memperbarui nomor telepon: ${e.toString()}')),
         );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
@@ -66,23 +112,26 @@ class _TelponState extends State<Telpon> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit Nomor Telepon'),
+        title: const Text('Edit Nomor Telepon'),
         content: TextField(
           controller: controller,
-          decoration: InputDecoration(hintText: 'Masukkan nomor telepon'),
+          decoration: const InputDecoration(
+            hintText: 'Masukkan nomor telepon',
+            prefixText: '+62 ',
+          ),
           keyboardType: TextInputType.phone,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
+            child: const Text('Batal'),
           ),
           TextButton(
-            onPressed: () {
-              _updatePhoneNumber(controller.text);
+            onPressed: () async {
               Navigator.pop(context);
+              await _updatePhoneNumber(controller.text);
             },
-            child: Text('Simpan'),
+            child: const Text('Simpan'),
           ),
         ],
       ),
@@ -100,7 +149,7 @@ class _TelponState extends State<Telpon> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -109,7 +158,7 @@ class _TelponState extends State<Telpon> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Telpon',
+                          'Telepon',
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 42,
                             fontWeight: FontWeight.w700,
@@ -118,9 +167,7 @@ class _TelponState extends State<Telpon> {
                         ),
                       ],
                     ),
-
                     const Gap(10),
-
                     GestureDetector(
                       onTap: _showEditDialog,
                       child: Container(
@@ -138,7 +185,7 @@ class _TelponState extends State<Telpon> {
                           ],
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 12, right: 16),
+                          padding: const EdgeInsets.only(left: 12, right: 16),
                           child: Row(
                             children: [
                               const Gap(10),
@@ -150,7 +197,7 @@ class _TelponState extends State<Telpon> {
                                   color: ColorConstant.abu,
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               SvgPicture.asset(
                                 'assets/svgs/pensil.svg',
                                 height: 24,
@@ -162,9 +209,7 @@ class _TelponState extends State<Telpon> {
                         ),
                       ),
                     ),
-
                     const Gap(12),
-
                     GestureDetector(
                       onTap: _showEditDialog,
                       child: Container(
@@ -213,6 +258,10 @@ class _TelponState extends State<Telpon> {
                   },
                 ),
               ),
+              if (_isLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
             ],
           ),
         ),

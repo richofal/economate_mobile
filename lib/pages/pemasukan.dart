@@ -1,5 +1,6 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/models/transaction_model.dart';
+import 'package:economate_mobile/provider/refresh_provider.dart';
 import 'package:economate_mobile/provider/transaction_provider.dart';
 import 'package:economate_mobile/provider/wallet_provider.dart';
 import 'package:economate_mobile/widgets/dropdown_category.dart';
@@ -92,7 +93,13 @@ class _PemasukanState extends State<Pemasukan> {
                       DropdownCategory(
                         isHint: 'Kategori',
                         isIncome: true,
-                        items: const ['Saku','Gaji', 'Hadiah', 'Investasi', 'Lainnya'],
+                        items: const [
+                          'Saku',
+                          'Gaji',
+                          'Hadiah',
+                          'Investasi',
+                          'Lainnya',
+                        ],
                         onChanged: (value) => _selectedCategory = value,
                         validator:
                             (value) => value == null ? 'Pilih kategori' : null,
@@ -176,6 +183,10 @@ class _PemasukanState extends State<Pemasukan> {
                               );
 
                               // Update wallet balance
+                              await transactionProvider.addTransaction(
+                                transaction,
+                              );
+                              
                               await _supabase.rpc(
                                 'update_wallet_balance',
                                 params: {
@@ -187,7 +198,11 @@ class _PemasukanState extends State<Pemasukan> {
                               );
 
                               if (mounted) {
-                                Navigator.pop(context);
+                                Provider.of<RefreshProvider>(
+                                  context,
+                                  listen: false,
+                                ).setRefresh(true);
+                                Navigator.pop(context, true);
                               }
                             } catch (e) {
                               if (mounted) {

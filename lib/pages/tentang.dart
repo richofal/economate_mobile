@@ -1,4 +1,5 @@
 import 'package:economate_mobile/constants/color_constant.dart';
+import 'package:economate_mobile/widgets/paragraf_tentang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/svg.dart';
@@ -54,14 +55,12 @@ class Tentang extends StatelessWidget {
 
                     const Gap(10),
 
-                    Text(
-                      'Penjelasan Aplikasi',
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: ColorConstant.abu,
-                      ),
-                    ),
+                    ParagrafTentang(text: 'Halo, senang bisa menyapa Anda melalui halaman ini!',),
+                    ParagrafTentang(text: 'Terima kasih telah memilih EconoMate sebagai teman setia dalam mengelola keuangan Anda.',),
+                    ParagrafTentang(text: 'Di era digital yang serba cepat, kami memahami pentingnya kemudahan dalam mencatat pemasukan dan pengeluaran, serta mengatur keuangan dengan lebih cerdas. Itulah mengapa EconoMate hadir dengan fitur-fitur yang dirancang untuk membantu Anda mengendalikan finansial dengan lebih efisien.',),
+                    ParagrafTentang(text: 'Dari pencatatan transaksi harian, pengelolaan modal untuk shopping, hingga fitur split bill yang memudahkan berbagi tagihan dengan teman, semuanya kami hadirkan dalam satu aplikasi dengan tampilan yang intuitif dan keamanan yang terjamin.',),
+                    ParagrafTentang(text: 'Membangun EconoMate adalah perjalanan yang luar biasa, dan kini kami bangga bisa menghadirkannya untuk Anda. Saatnya mengelola keuangan dengan lebih cerdas dan praktis. Live smarter, spend wiser with EconoMate!',),
+                    ParagrafTentang(text: 'Terus gunakan aplikasi ini dan nantikan inovasi kami selanjutnya!',),
                   ],
                 ),
               ),

@@ -1,11 +1,14 @@
 import 'package:economate_mobile/pages/analysis.dart';
+import 'package:economate_mobile/pages/edit_pemasukan.dart';
+import 'package:economate_mobile/pages/edit_pengeluaran.dart';
 import 'package:economate_mobile/pages/piechart.dart';
 import 'package:economate_mobile/pages/shopping.dart';
 import 'package:economate_mobile/pages/splitbill.dart';
+import 'package:economate_mobile/provider/refresh_provider.dart';
 import 'package:economate_mobile/widgets/background_home.dart';
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/widgets/fitur_home.dart';
-import 'package:economate_mobile/widgets/listhistory.dart';
+import 'package:economate_mobile/widgets/list_history.dart';
 import 'package:economate_mobile/widgets/saldobesar_home.dart';
 import 'package:economate_mobile/widgets/saldokecil_home.dart';
 import 'package:flutter/material.dart';
@@ -34,16 +37,36 @@ class _HomePageState extends State<HomePage> {
   double _totalIncome = 0;
   double _totalExpense = 0;
   bool _isLoading = true;
+  String _userName = '';
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadWallets();
-      _loadRecentTransactions();
+      _loadData();
+      _loadUserProfile();
     });
     _setupRealtimeListener();
     _setupTransactionListener();
+  }
+
+  // Buat satu fungsi untuk load semua data awal
+  Future<void> _loadData() async {
+    await _loadWallets();
+    await _loadRecentTransactions();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshProvider = Provider.of<RefreshProvider>(context, listen: true);
+
+    if (refreshProvider.needsRefresh) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _loadData();
+        refreshProvider.setRefresh(false);
+      });
+    }
   }
 
   // Tambahkan method baru untuk listener transaksi
@@ -169,6 +192,83 @@ class _HomePageState extends State<HomePage> {
         .subscribe();
   }
 
+  Future<void> _deleteTransaction(String id) async {
+    try {
+      final transactionProvider = Provider.of<TransactionProvider>(
+        context,
+        listen: false,
+      );
+      await transactionProvider.deleteTransaction(id);
+      await _loadRecentTransactions();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Transaksi berhasil dihapus')));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal menghapus transaksi: $e')));
+    }
+  }
+
+  void _editTransaction(BuildContext context, String id) {
+    final transactionProvider = Provider.of<TransactionProvider>(
+      context,
+      listen: false,
+    );
+    final transaction = transactionProvider.transactions.firstWhere(
+      (t) => t.id == id,
+    );
+
+    if (transaction.isIncome) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditPemasukanPage(transaction: transaction),
+        ),
+      ).then((_) {
+        _loadRecentTransactions();
+        _loadWallets();
+      });
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditPengeluaranPage(transaction: transaction),
+        ),
+      ).then((_) {
+        _loadRecentTransactions();
+        _loadWallets();
+      });
+    }
+  }
+
+  Future<void> _loadUserProfile() async {
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) return;
+
+      final response =
+          await _supabase
+              .from('profiles') // Ganti dengan nama tabel profil Anda
+              .select()
+              .eq('user_id', userId)
+              .single();
+
+      if (mounted) {
+        setState(() {
+          _userName =
+              response['display_name'] ?? 'Pengguna'; // Default jika nama kosong
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _userName = 'Pengguna';
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Hi, Taraka',
+                    'Halo!',
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
@@ -321,14 +421,62 @@ class _HomePageState extends State<HomePage> {
                               final transaction = _recentTransactions[index];
                               return Dismissible(
                                 key: Key(transaction.id),
+                                background: Container(
+                                  color: Colors.red,
+                                  alignment: Alignment.centerRight,
+                                  padding: EdgeInsets.only(right: 20),
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                confirmDismiss: (direction) async {
+                                  return await showDialog(
+                                    context: context,
+                                    builder:
+                                        (context) => AlertDialog(
+                                          title: Text('Konfirmasi Hapus'),
+                                          content: Text(
+                                            'Apakah Anda yakin ingin menghapus transaksi ini?',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    false,
+                                                  ),
+                                              child: Text('Batal'),
+                                            ),
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    true,
+                                                  ),
+                                              child: Text(
+                                                'Hapus',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                  );
+                                },
+                                onDismissed: (direction) {
+                                  _deleteTransaction(transaction.id);
+                                },
                                 child: ListHistory(
+                                  id: transaction.id,
                                   category: transaction.category,
                                   title: transaction.title,
-                                  date:
-                                      transaction
-                                          .date, // Pass the DateTime directly
+                                  date: transaction.date,
                                   amount: transaction.amount,
                                   isIncome: transaction.isIncome,
+                                  onDelete: (id) => _deleteTransaction(id),
+                                  onEdit: (id) => _editTransaction(context, id),
                                 ),
                               );
                             },

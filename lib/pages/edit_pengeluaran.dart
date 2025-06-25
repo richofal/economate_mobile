@@ -1,6 +1,5 @@
 import 'package:economate_mobile/constants/color_constant.dart';
 import 'package:economate_mobile/models/transaction_model.dart';
-import 'package:economate_mobile/provider/refresh_provider.dart';
 import 'package:economate_mobile/provider/transaction_provider.dart';
 import 'package:economate_mobile/provider/wallet_provider.dart';
 import 'package:economate_mobile/widgets/dropdown_category.dart';
@@ -15,14 +14,16 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class Pengeluaran extends StatefulWidget {
-  const Pengeluaran({super.key});
+class EditPengeluaranPage extends StatefulWidget {
+  final Transaction transaction;
+
+  const EditPengeluaranPage({super.key, required this.transaction});
 
   @override
-  State<Pengeluaran> createState() => _PengeluaranState();
+  State<EditPengeluaranPage> createState() => _EditPengeluaranPageState();
 }
 
-class _PengeluaranState extends State<Pengeluaran> {
+class _EditPengeluaranPageState extends State<EditPengeluaranPage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
@@ -30,11 +31,19 @@ class _PengeluaranState extends State<Pengeluaran> {
   String? _selectedCategory;
   String? _selectedWallet;
   final SupabaseClient _supabase = Supabase.instance.client;
+  double _originalAmount = 0;
 
   @override
   void initState() {
     super.initState();
-    _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // Isi form dengan data transaksi yang ada
+    _titleController.text = widget.transaction.title;
+    _amountController.text = widget.transaction.amount.toString();
+    _selectedCategory = widget.transaction.category;
+    _selectedWallet = widget.transaction.walletId;
+    _dateController.text = DateFormat('yyyy-MM-dd').format(widget.transaction.date);
+    _originalAmount = widget.transaction.amount;
+    
     // Load wallets saat init
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<WalletProvider>(context, listen: false).loadWallets();
@@ -70,7 +79,7 @@ class _PengeluaranState extends State<Pengeluaran> {
                     children: [
                       const Gap(36),
                       Text(
-                        'Pengeluaran',
+                        'Edit Pengeluaran',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 42,
                           fontWeight: FontWeight.w700,
@@ -82,11 +91,7 @@ class _PengeluaranState extends State<Pengeluaran> {
                       TextfieldInsert(
                         isHint: 'Judul',
                         controller: _titleController,
-                        validator:
-                            (value) =>
-                                value?.isEmpty ?? true
-                                    ? 'Judul harus diisi'
-                                    : null,
+                        validator: (value) => value?.isEmpty ?? true ? 'Judul harus diisi' : null,
                       ),
                       const Gap(24),
 
@@ -103,9 +108,9 @@ class _PengeluaranState extends State<Pengeluaran> {
                           'Olahraga',
                           'Lainnya',
                         ],
+                        selectedValue: _selectedCategory,
                         onChanged: (value) => _selectedCategory = value,
-                        validator:
-                            (value) => value == null ? 'Pilih kategori' : null,
+                        validator: (value) => value == null ? 'Pilih kategori' : null,
                       ),
                       const Gap(24),
 
@@ -114,12 +119,9 @@ class _PengeluaranState extends State<Pengeluaran> {
                         controller: _amountController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value?.isEmpty ?? true)
-                            return 'Nominal harus diisi';
-                          if (double.tryParse(value!) == null)
-                            return 'Masukkan angka yang valid';
-                          if (double.parse(value) <= 0)
-                            return 'Nominal harus lebih dari 0';
+                          if (value?.isEmpty ?? true) return 'Nominal harus diisi';
+                          if (double.tryParse(value!) == null) return 'Masukkan angka yang valid';
+                          if (double.parse(value) <= 0) return 'Nominal harus lebih dari 0';
                           return null;
                         },
                       ),
@@ -127,13 +129,11 @@ class _PengeluaranState extends State<Pengeluaran> {
 
                       DropdownWallet(
                         isHint: 'Wallet',
-                        items:
-                            walletProvider.wallets.map((w) => w.name).toList(),
-                        values:
-                            walletProvider.wallets.map((w) => w.id).toList(),
+                        items: walletProvider.wallets.map((w) => w.name).toList(),
+                        values: walletProvider.wallets.map((w) => w.id).toList(),
+                        selectedValue: _selectedWallet,
                         onChanged: (value) => _selectedWallet = value,
-                        validator:
-                            (value) => value == null ? 'Pilih wallet' : null,
+                        validator: (value) => value == null ? 'Pilih wallet' : null,
                       ),
                       const Gap(24),
 
@@ -144,15 +144,13 @@ class _PengeluaranState extends State<Pengeluaran> {
                         onTap: () async {
                           final date = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
+                            initialDate: widget.transaction.date,
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                           );
                           if (date != null) {
                             setState(() {
-                              _dateController.text = DateFormat(
-                                'yyyy-MM-dd',
-                              ).format(date);
+                              _dateController.text = DateFormat('yyyy-MM-dd').format(date);
                             });
                           }
                         },
@@ -160,62 +158,56 @@ class _PengeluaranState extends State<Pengeluaran> {
                       const Gap(24),
 
                       ButtonInsert(
+                        text: 'Update Pengeluaran',
                         onPressed: () async {
                           if (_formKey.currentState?.validate() ?? false) {
                             try {
-                              final transaction = Transaction(
-                                id: '', // ID akan di-generate oleh Supabase
-                                userId: _supabase.auth.currentUser?.id ?? '',
+                              final newAmount = double.parse(_amountController.text);
+                              final difference = _originalAmount - newAmount; // Selisih untuk pengeluaran
+
+                              final updatedTransaction = Transaction(
+                                id: widget.transaction.id,
+                                userId: widget.transaction.userId,
                                 title: _titleController.text,
                                 category: _selectedCategory ?? '',
-                                amount: double.parse(_amountController.text),
+                                amount: newAmount,
                                 walletId: _selectedWallet ?? '',
                                 date: DateTime.parse(_dateController.text),
                                 isIncome: false,
-                                createdAt: DateTime.now(),
+                                createdAt: widget.transaction.createdAt,
                               );
 
-                              final transactionProvider =
-                                  Provider.of<TransactionProvider>(
-                                    context,
-                                    listen: false,
-                                  );
-
-                              await transactionProvider.addTransaction(
-                                transaction,
+                              final transactionProvider = Provider.of<TransactionProvider>(
+                                context,
+                                listen: false,
                               );
 
-                              // Update wallet balance (negatif untuk pengeluaran)
+                              await transactionProvider.updateTransaction(updatedTransaction);
+
+                              // Update wallet balance dengan selisih perubahan
                               await _supabase.rpc(
                                 'update_wallet_balance',
                                 params: {
                                   'wallet_id': _selectedWallet,
-                                  'amount': double.parse(
-                                    _amountController.text,
-                                  ),
+                                  'amount': difference,
                                 },
                               );
 
                               if (mounted) {
-                                Provider.of<RefreshProvider>(
-                                  context,
-                                  listen: false,
-                                ).setRefresh(true);
-                                Navigator.pop(context, true);
+                                Navigator.pop(context);
                               }
                             } catch (e) {
                               if (mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(
-                                      'Gagal menambah transaksi: $e',
-                                    ),
+                                    content: Text('Gagal mengupdate transaksi: $e'),
                                   ),
                                 );
                               }
                             }
                           }
                         },
+                        backgroundColor: ColorConstant.birumuda,
                       ),
                     ],
                   ),

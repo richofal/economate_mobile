@@ -26,35 +26,35 @@ class _ShoppingState extends State<Shopping> {
   }
 
   Future<void> _fetchShoppingLists() async {
-  setState(() => isLoading = true);
-  
-  final userId = supabase.auth.currentUser?.id;
-  if (userId == null) {
-    setState(() => isLoading = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('User not logged in')),
-    );
-    return;
-  }
+    setState(() => isLoading = true);
 
-  try {
-    final response = await supabase
-        .from('shopping_lists')
-        .select()
-        .eq('user_id', userId)
-        .order('created_at', ascending: false);
-    
-    setState(() {
-      shoppingLists = response as List<Map<String, dynamic>>;
-      isLoading = false;
-    });
-  } catch (e) {
-    setState(() => isLoading = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error fetching shopping lists: $e')),
-    );
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('User not logged in')));
+      return;
+    }
+
+    try {
+      final response = await supabase
+          .from('shopping_lists')
+          .select()
+          .eq('user_id', userId)
+          .order('created_at', ascending: false);
+
+      setState(() {
+        shoppingLists = response as List<Map<String, dynamic>>;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching shopping lists: $e')),
+      );
+    }
   }
-}
 
   Future<void> _addNewShoppingList() async {
     final nameController = TextEditingController();
@@ -62,61 +62,79 @@ class _ShoppingState extends State<Shopping> {
 
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('New Shopping List', style: GoogleFonts.plusJakartaSans()),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'List Name',
-              ),
+      builder:
+          (context) => AlertDialog(
+            title: Text(
+              'New Shopping List',
+              style: GoogleFonts.plusJakartaSans(),
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: budgetController,
-              decoration: InputDecoration(
-                labelText: 'Initial Budget',
-              ),
-              keyboardType: TextInputType.number,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: 'List Name'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: budgetController,
+                  decoration: InputDecoration(labelText: 'Initial Budget'),
+                  keyboardType: TextInputType.number,
+                ),
+              ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (nameController.text.isEmpty || budgetController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Please fill all fields')),
-                );
-                return;
-              }
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (nameController.text.isEmpty ||
+                      budgetController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please fill all fields')),
+                    );
+                    return;
+                  }
 
-              try {
-                final budget = double.tryParse(budgetController.text) ?? 0;
-                await supabase.from('shopping_lists').insert({
-                  'user_id': supabase.auth.currentUser?.id,
-                  'name': nameController.text,
-                  'initial_budget': budget,
-                });
-                
-                Navigator.pop(context);
-                await _fetchShoppingLists();
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error creating list: $e')),
-                );
-              }
-            },
-            child: Text('Create'),
+                  try {
+                    final budget = double.tryParse(budgetController.text) ?? 0;
+                    final response =
+                        await supabase.from('shopping_lists').insert({
+                          'user_id': supabase.auth.currentUser?.id,
+                          'name': nameController.text,
+                          'initial_budget': budget,
+                        }).select(); // Add .select() to get the inserted data
+
+                    if (response != null && response.isNotEmpty) {
+                      final newList = response[0] as Map<String, dynamic>;
+                      Navigator.pop(context); // Close the dialog
+                      Navigator.push(
+                        // Navigate to CartShopping
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => CartShopping(
+                                shoppingListId: newList['id'],
+                                initialBudget:
+                                    (newList['initial_budget'] as num)
+                                        .toDouble(),
+                                listName: newList['name'],
+                              ),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error creating list: $e')),
+                    );
+                  }
+                },
+                child: Text('Create'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -155,20 +173,26 @@ class _ShoppingState extends State<Shopping> {
                     if (isLoading)
                       const CircularProgressIndicator()
                     else ...[
-                      ...shoppingLists.map((list) => ListShopping(
-                        isName: list['name'],
-                        isNominal: (list['initial_budget'] as num).toDouble(),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CartShopping(
-                              shoppingListId: list['id'],
-                              initialBudget: (list['initial_budget'] as num).toDouble(),
-                              listName: list['name'],
-                            ),
-                          ),
+                      ...shoppingLists.map(
+                        (list) => ListShopping(
+                          isName: list['name'],
+                          isNominal: (list['initial_budget'] as num).toDouble(),
+                          onTap:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => CartShopping(
+                                        shoppingListId: list['id'],
+                                        initialBudget:
+                                            (list['initial_budget'] as num)
+                                                .toDouble(),
+                                        listName: list['name'],
+                                      ),
+                                ),
+                              ),
                         ),
-                      )),
+                      ),
                     ],
 
                     const Gap(2),

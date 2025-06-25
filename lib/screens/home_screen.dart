@@ -5,10 +5,12 @@ import 'package:economate_mobile/pages/pemasukan.dart';
 import 'package:economate_mobile/pages/pengeluaran.dart';
 import 'package:economate_mobile/pages/profile_page.dart';
 import 'package:economate_mobile/pages/wallet_page.dart';
+import 'package:economate_mobile/provider/refresh_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -233,23 +235,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const Gap(8),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                          if (isPemasukanSelected) {
-                            Navigator.push(
+                        onTap: () async {
+                          Navigator.pop(context); // Tutup modal
+                          final shouldRefresh = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      isPemasukanSelected
+                                          ? Pemasukan()
+                                          : Pengeluaran(),
+                            ),
+                          );
+
+                          if (shouldRefresh == true && mounted) {
+                            // Panggil refresh provider
+                            Provider.of<RefreshProvider>(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => Pemasukan(),
-                              ),
-                            );
-                          }
-                          if (isPengeluaranSelected) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Pengeluaran(),
-                              ),
-                            );
+                              listen: false,
+                            ).setRefresh(true);
                           }
                         },
                         child: Container(

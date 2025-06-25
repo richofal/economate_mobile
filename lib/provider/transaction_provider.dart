@@ -51,6 +51,43 @@ class TransactionProvider with ChangeNotifier {
       debugPrint('Error adding transaction: $e');
       rethrow;
     }
+    notifyListeners();
+  }
+
+  Future<void> updateTransaction(Transaction transaction) async {
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.from('transactions').update({
+        'title': transaction.title,
+        'category': transaction.category,
+        'amount': transaction.amount,
+        'wallet_id': transaction.walletId,
+        'date': transaction.date.toIso8601String(),
+        'is_income': transaction.isIncome,
+      }).eq('id', transaction.id);
+
+      // Update local data
+      final index = _transactions.indexWhere((t) => t.id == transaction.id);
+      if (index != -1) {
+        _transactions[index] = transaction;
+        notifyListeners();
+      }
+    } catch (e) {
+      throw Exception('Failed to update transaction: $e');
+    }
+  }
+
+  Future<void> deleteTransaction(String id) async {
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.from('transactions').delete().eq('id', id);
+
+      // Remove from local data
+      _transactions.removeWhere((t) => t.id == id);
+      notifyListeners();
+    } catch (e) {
+      throw Exception('Failed to delete transaction: $e');
+    }
   }
 
   @override

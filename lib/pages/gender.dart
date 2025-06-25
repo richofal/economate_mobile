@@ -15,6 +15,7 @@ class Gender extends StatefulWidget {
 class _GenderState extends State<Gender> {
   final supabase = Supabase.instance.client;
   String _gender = 'Laki-laki';
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -23,42 +24,115 @@ class _GenderState extends State<Gender> {
   }
 
   Future<void> _loadGender() async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId != null) {
-      final response = await supabase
-          .from('profiles')
-          .select('gender')
-          .eq('id', userId)
-          .single();
+    if (!mounted) return;
+    
+    setState(() {
+      _isLoading = true;
+    });
 
-      if (response != null) {
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final response = await supabase
+            .from('profiles')
+            .select('gender')
+            .eq('id', userId)
+            .single()
+            .timeout(const Duration(seconds: 5));
+
+        if (response != null && mounted) {
+          setState(() {
+            _gender = response['gender'] ?? 'Laki-laki';
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memuat gender: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
         setState(() {
-          _gender = response['gender'] ?? 'Laki-laki';
+          _isLoading = false;
         });
       }
     }
   }
 
   Future<void> _updateGender(String newGender) async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId != null) {
-      final response = await supabase
-          .from('profiles')
-          .upsert({
-            'id': userId,
-            'gender': newGender,
-            'updated_at': DateTime.now().toIso8601String(),
-          });
+    if (!mounted || _isLoading) return;
 
-      if (response.error == null) {
-        setState(() {
-          _gender = newGender;
-        });
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final response = await supabase
+            .from('profiles')
+            .update({
+              'gender': newGender,
+              'updated_at': DateTime.now().toIso8601String(),
+            })
+            .eq('id', userId)
+            .select()
+            .single()
+            .timeout(const Duration(seconds: 5));
+
+        if (mounted) {
+          setState(() {
+            _gender = response['gender'] ?? newGender;
+          });
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Gender berhasil diperbarui')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gender berhasil diperbarui')),
+          SnackBar(content: Text('Gagal memperbarui gender: ${e.toString()}')),
         );
       }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
+  }
+
+  void _showGenderDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Pilih Gender'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text('Laki-laki'),
+              onTap: () async {
+                Navigator.pop(context);
+                await _updateGender('Laki-laki');
+              },
+            ),
+            ListTile(
+              title: Text('Perempuan'),
+              onTap: () async {
+                Navigator.pop(context);
+                await _updateGender('Perempuan');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -72,7 +146,7 @@ class _GenderState extends State<Gender> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -90,9 +164,7 @@ class _GenderState extends State<Gender> {
                         ),
                       ],
                     ),
-
                     const Gap(10),
-
                     Container(
                       height: 50,
                       width: double.infinity,
@@ -108,7 +180,7 @@ class _GenderState extends State<Gender> {
                         ],
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 12, right: 16),
+                        padding: const EdgeInsets.only(left: 12, right: 16),
                         child: Row(
                           children: [
                             const Gap(10),
@@ -120,7 +192,7 @@ class _GenderState extends State<Gender> {
                                 color: ColorConstant.abu,
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             SvgPicture.asset(
                               'assets/svgs/pensil.svg',
                               height: 24,
@@ -131,37 +203,9 @@ class _GenderState extends State<Gender> {
                         ),
                       ),
                     ),
-
                     const Gap(12),
-
                     GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Pilih Gender'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListTile(
-                                  title: Text('Laki-laki'),
-                                  onTap: () {
-                                    _updateGender('Laki-laki');
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  title: Text('Perempuan'),
-                                  onTap: () {
-                                    _updateGender('Perempuan');
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                      onTap: _showGenderDialog,
                       child: Container(
                         height: 50,
                         width: double.infinity,
@@ -208,6 +252,10 @@ class _GenderState extends State<Gender> {
                   },
                 ),
               ),
+              if (_isLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
             ],
           ),
         ),

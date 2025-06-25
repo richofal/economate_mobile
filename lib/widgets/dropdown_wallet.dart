@@ -12,6 +12,7 @@ class DropdownWallet extends StatelessWidget {
   final List<String> items;
   final List<String> values;
   final String? initialValue;
+  final String? selectedValue;
 
   const DropdownWallet({
     super.key,
@@ -21,6 +22,7 @@ class DropdownWallet extends StatelessWidget {
     required this.items,
     required this.values,
     this.initialValue,
+    this.selectedValue,
   });
 
   @override
@@ -65,7 +67,7 @@ class DropdownWallet extends StatelessWidget {
                       color: ColorConstant.abu,
                     ),
                   ),
-                  value: initialValue,
+                  value: selectedValue,
                   items: List.generate(items.length, (index) {
                     return DropdownMenuItem<String>(
                       value: values[index],

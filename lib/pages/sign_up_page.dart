@@ -211,90 +211,90 @@ class _SignUpPageState extends State<SignUpPage> {
 
               Column(
                 children: [
-                  SizedBox(
-                    width: 340,
-                    height: 20,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: ColorConstant.abu,
-                            thickness: 1.5,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text(
-                            'Atau sign in dengan',
-                            style: GoogleFonts.plusJakartaSans(
-                              color: ColorConstant.abu,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: ColorConstant.abu,
-                            thickness: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: 340,
+                  //   height: 20,
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Expanded(
+                  //         child: Divider(
+                  //           color: ColorConstant.abu,
+                  //           thickness: 1.5,
+                  //         ),
+                  //       ),
+                  //       Padding(
+                  //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  //         child: Text(
+                  //           'Atau sign in dengan',
+                  //           style: GoogleFonts.plusJakartaSans(
+                  //             color: ColorConstant.abu,
+                  //             fontWeight: FontWeight.w500,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //         child: Divider(
+                  //           color: ColorConstant.abu,
+                  //           thickness: 1.5,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
-                  const Gap(15),
+                  // const Gap(15),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Google button
-                      Container(
-                        padding: EdgeInsets.all(12),
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xB1C5BAFF),
-                              spreadRadius: 1,
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Image.asset(
-                          'assets/images/google.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      // Facebook button
-                      Container(
-                        padding: EdgeInsets.all(12),
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xB1C5BAFF),
-                              spreadRadius: 1,
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Image.asset(
-                          'assets/images/facebook.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     // Google button
+                  //     Container(
+                  //       padding: EdgeInsets.all(12),
+                  //       width: 50,
+                  //       height: 50,
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.white,
+                  //         shape: BoxShape.circle,
+                  //         boxShadow: [
+                  //           BoxShadow(
+                  //             color: Color(0xB1C5BAFF),
+                  //             spreadRadius: 1,
+                  //             blurRadius: 8,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       child: Image.asset(
+                  //         'assets/images/google.png',
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 20),
+                  //     // Facebook button
+                  //     Container(
+                  //       padding: EdgeInsets.all(12),
+                  //       width: 50,
+                  //       height: 50,
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.white,
+                  //         shape: BoxShape.circle,
+                  //         boxShadow: [
+                  //           BoxShadow(
+                  //             color: Color(0xB1C5BAFF),
+                  //             spreadRadius: 1,
+                  //             blurRadius: 8,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       child: Image.asset(
+                  //         'assets/images/facebook.png',
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
 
-                  const Gap(40),
+                  // const Gap(40),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
